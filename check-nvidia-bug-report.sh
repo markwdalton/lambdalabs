@@ -1,5 +1,6 @@
 #!/bin/sh
-
+# From: git@github.com:markwdalton/lambdalabs.git
+#
 # Has all the Xid errors except 94 or ones for A100
 # Add the path you place the CSV list of errors
 NVIDIA_XID_ERRORS="~/data/xid-errors.csv"
@@ -10,10 +11,17 @@ NVIDIA_XID_ERRORS="~/data/xid-errors.csv"
 #     grep -A 2 "^[0-9a-z][0-9a-z]:00.0" | grep -A 2 NVIDIA 
 # 3. Make sure to add the A100 messages - DONE
 # 4. Add the 'undocumented Xids we have seen recently" - new bios for 420GP-TNR - DONE
+#    Commonly also GPUs show a 'Unknown Error"
 # 5. Get the Baseboard also     - DONE
 # 6. Check Segfaults            - DONE
 # 7. Check CPU Throttlng        - DONE
 # 8. Check for "Hardware Error" - DONE
+#
+# Other Check's TBD:
+#   Quadro 8000 - vBIOS - Original Video BIOS has a fix for failures - Xid - falling off the bus
+#   SMC 4124GO-NART/4124GO-NART+ - 'limited by or slow stuck at GPU 500Mhz - BIOS update'
+#   Gigabyte G292-Z4* G492-Z5*   - BIOS update for GPU failures, crashes - SERR/PERR in 'ipmitool sel elist'
+#
 
 if [ -z "$1" ]; then
   echo "Using nvidia-bug-report.log"
@@ -110,7 +118,7 @@ else
 fi
 
 # Check for Hardware Errors:
-HARDWARE_ERRORS=$(egrep "Hardware Error" ${FILE} | wc -l)
+HARDWARE_ERRORS=$(grep -c "Hardware Error" ${FILE})
 if [ ${HARDWARE_ERRORS} -gt 0 ]; then
    echo " "
    echo "Hardware Errors: ${HARDWARE_ERRORS}"

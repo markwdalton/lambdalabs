@@ -1,23 +1,38 @@
 IB Diagnostics - layer 1 - where a card is stuck in Polling
 
-Add:
-   hca_self_test.ofed
-   perfquery
-
 General setup: (so check these)
  1. Mellanox will generally ask for you to upgrade your switch and your card to the latest firmware
  2. Should not enable computers 'fast boot'
  3. Checking BIOS options:
     On SMC it works by default:
-    a. Get the BIOS settings
+    a. Get the BIOS settings (On Supermicro machines):
        export BMC_IP=$(sudo ipmitool lan print 1 | grep "IP Address" | egrep -v Source | awk '{print $4}')
        curl -s -k -H'Content-type: application/json' -X GET https:/${BMC_IP}/registries/BiosAttributeRegistry.1.0.0.json > $(uname -n)-bios.json
     b. Search the bios.json for settings: 
+       SMT - ie. Hyperthreading can be left on, but then fix other settings (varies based on chassis).
+           - Hyperthreading is commonly helpful on codes that have idle/dangling threads.
+              * HPC C/Fortan codes typically do better with SMT disabled
+              * Python - Undetermined - needs benchmarking
+              * Kubernetes type services would do better with hyperthreads
+
        (This is for Supermicro needs verification on each chassis types, based on the BIOS options:
-           4124GO-NART+: ACS, IOMMU, SMEE, SMT, Determinism Control  (NOTE: we did not change TSME)
-           4124GS-TNR: ACS, IOMMU, SMT, Determinism Control  (NOTE: No SMEE, need to confirm at TSME 
+        4124GO-NART+: ACS, IOMMU, SMEE, SMT, Determinism Control  (NOTE: we did not change TSME)
+        4124GS-TNR: ACS, IOMMU, SMT, Determinism Control  (NOTE: No SMEE, need to confirm at TSME 
                         - I would leave or disable TSME as it adds latency 5 ns–7 ns of additional memory latency.
                         - Source of timing: The BIOS info.
+        420GP-TNR - For NCCL - disable ACS here or on the boot
+         BIOS settings: (if kernel options are below)
+           * "MenuPath": "./Advanced/ProcessorConfiguration/AdvancedPowerManagementConfiguration/PackageCStateControl",
+             "AttributeName": "PackageCState",
+              - Set value: Auto  - worked for one site as 'Auto' but not at 'C0/C1 state'
+           * MenuPath": "./Advanced/ProcessorConfiguration/AdvancedPowerManagementConfiguration/HardwarePMStateControl",
+              - Hardware P-States - Disable
+           * "MenuPath": "./Advanced/ChipsetConfiguration/NorthBridge/IIOConfiguration/Intel®VTforDirectedI|O(VT-d)",
+             "AttributeName": "ACSControl",
+         Intel boot:
+           * intel_iommu=off iommu=pt processor.max_cstate=1 intel_idle.max_cstate=0 mitigations=off nohz=off skew_tick=1 \ 
+               mce=ignore_ce numa_balancing=disable
+
       (SME vs TSME: https://mricher.fr/post/amd-memory-encryption/)
        (json from above)
        cat $(uname -n)-bios.json | jq | egrep -B 4 -A 4 "ACS|IOMMU|SMEE|SMT|Determinism Control"
@@ -32,6 +47,11 @@ General setup: (so check these)
        Also confirm 'fast boot' is off - desktops
        For SMT - there are other options and leave multithreading depending on the code it may perform better with threading.
                  (normally for codes that have dangling threads).
+    c. Updating the BIOS either in the reboot/BIOS or via the SUM tool:
+       Requires a license and download of software:
+            https://www.supermicro.com/en/solutions/management-software/supermicro-update-manager
+            sum_2.10.0_Linux_x86_64/sum -c GetCurrentBiosCfg
+            sum_2.10.0_Linux_x86_64/sum -c ChangeBiosCfg --file ./fw/bios_settings.xml
 
  3. Check CPU frequency settings:
     a. Disable the ondemand: systemctl disable ondemand and set the CPUs to performance (versus ondemand)
@@ -49,10 +69,11 @@ General setup: (so check these)
        >         echo -n $GOVERNOR > $CPUFREQ
        > done
        > EOF
+
     b. Run the cpu_freq.sh
        $ sudo sh ./cpu_freq.sh
 
-4. Check the Mellanox driver version
+ 4. Check the Mellanox driver version
        $ ibstat | grep "Firmware version:" | sort | uniq -c 
           8 	Firmware version: 20.34.1002
 
@@ -66,13 +87,43 @@ This can be caused by various issues:
            * If the card, reflash the card (if not previously done)
            * Reseat or replace card
  2. Cable Transciever 
-        - ProLabs - cables - update the FirmWare (on-site)
- 3. Firmware - reflashing the card
+        - ProLabs - cables - update the FirmWare (on-site) - may require special connection/software
+ 3. Firmware for the card - reflashing the card
  4. Card - see #1 for debugging, but at times a card failure
  4. Switch port - see #1 for debugging - solution: use a alternate port label that port
  5. OpenSM running is sometimes a issue - commonly run on the switch (or up to three nodes)
 
+Basic level diagnosis (no sense testing if it is down):
+ ibstat - see if the ports are enabled, 
+    CA 'mlx5_0'
+	CA type: MT4123
+	Firmware version: 20.34.1002
+        ..
+        Port 1:
+		State: Down
+		Physical state: Polling
+		Rate: 200
+		Link layer: InfiniBand
+  vs: On working node/card:
+    CA 'mlx5_0'
+        CA type: MT4123
+        Firmware version: 20.34.1002
+        ..
+        Port 1:
+		State: Active
+		Physical state: LinkUp
+		Rate: 200
+		Link layer: InfiniBand
+
 General data collection: (since ibqueryerrors does not always work if the machine is in a bad state): 
+  $ sudo hca_self_test.ofed
+  $ sudo perfquery
+  nccl-tests: (from: https://github.com/NVIDIA/nccl-tests.git)
+    Build:
+      $ make MPI=1 MPI_HOME=/usr/lib/x86_64-linux-gnu/openmpi
+    Run:
+      $ mpirun -np 96 --host node1:8,node2:8,node3:8,node4:8,node5:8,node6:8,node7:8,node9:8,node10:8,node11:8,node12:8 -mca btl tcp,self -mca mtl ^ofi -x NCCL_DEBUG=INFO ./nccl-tests/build/all_gather_perf -b 8 -e 4G -f 2 -g 8
+
   $ export DIRNAME=diags-$(uname -n)
   $ mkdir ${DIRNAME}
   $ cd ${DIRNAME}
