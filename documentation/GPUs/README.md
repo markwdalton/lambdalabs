@@ -42,7 +42,15 @@ NVIDIA GPUs and common questions/issues.
           *Also you may have local site packages installed here*
 
    Then use a virtual environment for python:
-      * Python venv
+      * Python venv * Two ways to do this:
+          a. Independant and install all needed packages ('my_env' can be any name)
+             $ python -m venv my_env
+             $ . ./my_env/activate
+             $ pip install <all required packages>
+          b. Use default system packages (less reliable with TensorFlow as library conflicts) (
+             $ python -m venv --system-site-packages my_use_system_env
+             $ . ./my_use_system_env/bin/activate
+             $ pip install <other required packages>
       * Docker/Singularity
       * Anaconda/Miniconda - note license changed in the last few years from free - to non-commercial use
 ```
