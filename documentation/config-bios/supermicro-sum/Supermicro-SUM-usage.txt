@@ -1,0 +1,145 @@
+
+sum_2.10.0_Linux_x86_64/sum
+Supermicro Update Manager (for UEFI BIOS) 2.10.0 (2022/12/09) (x86_64)
+Copyright(C) 2013-2022 Super Micro Computer, Inc. All rights reserved.
+
+NAME
+  sum (Supermicro Update Manager)
+
+SYNOPSIS
+  sum [OPTIONs] [COMMAND] [COMMAND ARGUMENTS]
+
+OPTIONS
+  -h                       Shows help information.
+  -v                       Displays the verbose output.
+  -I                       <InterfaceName>
+                           (case sensitive)
+                           Supported Interfaces:
+                           1. Redfish_HI (Execute In-Band commands through
+                              Redfish Host Interface)
+                           2. Remote_INB (Execute In-Band commands on a remote)
+                              system)
+                           3. Remote_RHI (Execute In-Band commands through
+                              Redfish Host Interface on a remote system)
+  -i                       <BMC/CMM IP address or host name>
+                           (case sensitive)
+  -l                       <BMC/CMM system list file name. Refer to the user's
+                           guide for formatting.>
+  -u                       <BMC/CMM user ID>
+  -p                       <BMC/CMM user password>
+  -f                       <BMC/CMM user password file>
+  -c                       <command name>
+  --oi                     <OS IP address>
+  --ou                     <OS user ID>
+  --op                     <OS user password>
+  --os_key                 <OS private key>
+  --os_key_pw              <OS private key password>
+  --port                   <BMC/CMM/Command port(s)>
+                           The format is "RMCP:623,HTTPS:443"
+                           Supported Ports:
+                           1. RMCP (for BMC/CMM OOB usage)
+                           2. HTTPS (for BMC/CMM Redfish usage)
+                           (Will overwrite the ports in .sumrc file)
+                           Each command may support more optional port(s).
+                           Please read the help message of each command.
+  --version                Shows version information.
+  --journal_level          <set SUM journal level>
+                           (0: silent, 1: fatal, 2: error, 3: warning, 4:
+                           information, 5: debug, 6: verbose)
+  --journal_path           <set SUM journal path>
+  --rc_path                <set .sumrc file path>
+  --show_multi_full        show intermediate status of all managed systems
+                           (For multiple systems OOB management only)
+
+USAGE MODES
+ *  Single System Out-Of-Band (OOB) Management [operates on single BMC/CMM]:
+    Must use -i, -u, -p options
+ *  Single System In-Band Management [operates on local OS]: Do not use -i
+    option
+ *  Single System Remote In-Band Management [operates on remote OS]: Use -I
+    Remote_INB or -I Remote_RHI option
+ *  Multiple Systems OOB Management [operates on multiple system BMCs/CMMs]:
+    Replace -i option with -l option
+ *  Multiple Systems Remote In-Band Management [operates on multiple system
+    OSs]: Use -I Remote_INB or -I Remote_RHI option, together with -l option
+
+COMMANDS
+Function Group             Command Names
+
+Key Management             ActivateProductKey, QueryProductKey
+System Checks              CheckOOBSupport, CheckAssetInfo,
+                           CheckSystemUtilization, CheckSensorData,
+                           ServiceCalls, SystemPFA, MemoryHealthCheck,
+                           CpuOnDemand, GetFruInfo, RestoreFruInfo,
+                           ChassisIntrusion
+BIOS Management            GetBiosInfo, UpdateBios, GetDefaultBiosCfg,
+                           GetCurrentBiosCfg, ChangeBiosCfg, LoadDefaultBiosCfg,
+                           SetBiosPassword, GetDmiInfo, ChangeDmiInfo,
+                           EditDmiInfo, EraseOAKey, BiosRotManage, GetScpInfo,
+                           UpdateScp
+BMC Management             GetBmcInfo, UpdateBmc, GetBmcCfg, ChangeBmcCfg,
+                           GetBmcLANCfg, ChangeBmcLANCfg, SetBmcPassword,
+                           GetKcsPriv, SetKcsPriv, GetLockdownMode,
+                           SetLockdownMode, LoadDefaultBmcCfg, BmcRotManage,
+                           GetBmcUserList, SetBmcUserList, TimedBmcReset,
+                           Attestation
+System Event Log           GetHostDump, GetEventLog, ClearEventLog,
+                           GetMaintenEventLog, ClearMaintenEventLog
+CMM Management             GetCmmInfo, UpdateCmm, GetCmmCfg, ChangeCmmCfg,
+                           SetCmmPassword, LoadDefaultCmmCfg, GetBbpInfo,
+                           UpdateBbp, GetBladePowerStatus, SetBladePowerAction,
+                           ProfileManage, GetSwitchInfo, UpdateSwitch,
+                           RebootSwitch
+Storage Management         GetRaidControllerInfo, UpdateRaidController,
+                           GetRaidCfg, ChangeRaidCfg, GetSataInfo, GetNvmeInfo,
+                           SecureEraseRaidHdd, GetVROCCfg, ChangeVROCCfg,
+                           ControlNVMe, SecureEraseDisk, UpdatePMem, GetPMemInfo
+PSU Management             GetPsuInfo, UpdatePsu, GetPowerStatus,
+                           SetPowerAction, GetPsysStatus, SetPsysStatus
+Applications               MountIsoImage, UnmountIsoImage, MountFloppyImage,
+                           UnmountFloppyImage, RawCommand, GetUsbAccessMode,
+                           SetUsbAccessMode, LocateServerUid, SetHttpBoot,
+                           KmsManage, RedfishApi, GetSystemCfg, ChangeSystemCfg,
+                           RemoteExec
+TPM Management             TpmProvision, TpmManage, GetTpmInfo
+GPU Management             GetGpuInfo, UpdateGpu
+CPLD Management            GetCpldInfo, UpdateCpld
+NIC Management             UpdateAocNIC, GetAocNICInfo
+AIP Management             GetAipCpldInfo, UpdateAipCpld
+TwinPro Management         GetTpCfg, ChangeTpCfg
+
+COMMAND USAGE
+  See help message for each command
+  Syntax:" # ./sum -h -c <command name>"
+  Notes: 1) Commands are platform dependent. Please refer to Appendix C in the
+         user's guide for platform dependency hints.
+         2) If a BMC/CMM user ID or password includes special character(s), it
+         has to be quoted.
+         3) Use -p option or -f option for assigning a password, do not use them
+         together.
+
+EXAMPLES
+Single Systems
+  OOB
+    # ./sum -i 192.168.34.56 -u ADMIN -p ADMIN -c ChangeBmcCfg --file BmcCfg.txt
+    # ./sum -i 192.168.34.56 -u ADMIN -f password.txt -c ChangeBmcCfg --file
+    BmcCfg.txt
+  In-Band
+    # ./sum -c UpdateBios --file BIOS.rom
+  Remote In-Band
+    # ./sum -I Remote_INB --oi 192.168.34.56 --ou root --op 111111 -c UpdateBios
+    --file BIOS.rom --remote_sum /root/sum
+    # ./sum -I Remote_RHI --oi 192.168.34.56 --ou root --op 111111 -u ADMIN -p
+    ADMIN -c UpdateBios --file BIOS.rom --remote_sum /root/sum
+Multiple Systems
+  OOB
+    # ./sum -l IP_ADDR_RANGE.txt -u ADMIN -p ADMIN -c GetBIOSInfo --file
+    BIOS.rom
+    # ./sum -l IP_ADDR_RANGE.txt -u ADMIN -f password.txt -c GetBIOSInfo --file
+    BIOS.rom
+  Remote In-Band
+    # ./sum -I Remote_INB -l IP_ADDR_RANGE.txt -c UpdateBios --file BIOS.rom
+    # ./sum -I Remote_RHI -l IP_ADDR_RANGE.txt -c UpdateBios --file BIOS.rom
+Help Message
+    # ./sum -h -c UpdateBios
+
