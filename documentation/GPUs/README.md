@@ -29,6 +29,7 @@ NVIDIA GPUs and common questions/issues.
 3. Seeing the versions of python modules you are using, this is the most common problem python users run into for conflicts.
    When local pip is used without versioning either ${HOME}/.local or /usr/local installed tools may work for one code and
    break another.
+```
       $ pip -v list > pip.txt
       **This will show the version and the path of the install**
       Lambda Stack software is installed in:
@@ -41,7 +42,7 @@ NVIDIA GPUs and common questions/issues.
           *Also you may have local site packages installed here*
 
    Then use a virtual environment for python:
-      *Python venv
-      *Docker/Singularity
-      *Anaconda/Miniconda - note license changed in the last few years from free - to non-commercial use
-
+      * Python venv
+      * Docker/Singularity
+      * Anaconda/Miniconda - note license changed in the last few years from free - to non-commercial use
+```
