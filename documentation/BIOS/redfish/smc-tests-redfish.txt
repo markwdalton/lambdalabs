@@ -1,0 +1,91 @@
+For a Supermicro SYS-420GP-TNAR
+   USER:PASSWORD is not needed for reads/-X GET
+   curl -s -k -u $USER:$PASSWORD -H'Content-type: application/json' -X GET
+
+$ curl -s -k -H'Content-type: application/json' -X GET https://${BMC_IP}/redfish/v1/ | jq
+{
+  "@odata.type": "#ServiceRoot.v1_5_2.ServiceRoot",
+  "@odata.id": "/redfish/v1/",
+  "Id": "RootService",
+  "Name": "Root Service",
+  "RedfishVersion": "1.8.0",
+  "UUID": "00000000-0000-0000-0000-3CECEF2F8346",
+  "Systems": {
+    "@odata.id": "/redfish/v1/Systems"
+  },
+  "Chassis": {
+    "@odata.id": "/redfish/v1/Chassis"
+  },
+  "Managers": {
+    "@odata.id": "/redfish/v1/Managers"
+  },
+  "Tasks": {
+    "@odata.id": "/redfish/v1/TaskService"
+  },
+  "SessionService": {
+    "@odata.id": "/redfish/v1/SessionService"
+  },
+  "AccountService": {
+    "@odata.id": "/redfish/v1/AccountService"
+  },
+  "EventService": {
+    "@odata.id": "/redfish/v1/EventService"
+  },
+  "UpdateService": {
+    "@odata.id": "/redfish/v1/UpdateService"
+  },
+  "CertificateService": {
+    "@odata.id": "/redfish/v1/CertificateService"
+  },
+  "Registries": {
+    "@odata.id": "/redfish/v1/Registries"
+  },
+  "JsonSchemas": {
+    "@odata.id": "/redfish/v1/JsonSchemas"
+  },
+  "TelemetryService": {
+    "@odata.id": "/redfish/v1/TelemetryService"
+  },
+  "Links": {
+    "Sessions": {
+      "@odata.id": "/redfish/v1/SessionService/Sessions"
+    }
+  },
+  "Oem": {
+    "Supermicro": {
+      "DumpService": {
+        "@odata.id": "/redfish/v1/Oem/Supermicro/DumpService"
+      }
+    }
+  }
+}
+
+$ curl -s -k -H'Content-type: application/json' -X GET https://${BMC_IP}/redfish/v1/Registries/ | jq
+{
+  "@odata.type": "#MessageRegistryFileCollection.MessageRegistryFileCollection",
+  "@odata.id": "/redfish/v1/Registries",
+  "Name": "Registry File Collection",
+  "Description": "Registry Repository",
+  "Members": [
+    {
+      "@odata.id": "/redfish/v1/Registries/BiosAttributeRegistry.v1_0_0"
+    },
+    {
+      "@odata.id": "/redfish/v1/Registries/Base.v1_4_0"
+    },
+    {
+      "@odata.id": "/redfish/v1/Registries/Event.v1_0_0"
+    },
+    {
+      "@odata.id": "/redfish/v1/Registries/SMC.v1_0_0"
+    }
+  ],
+  "Members@odata.count": 4
+}
+
+https://10.0.10.160/registries/BiosAttributeRegistry.1.0.0.json
+
+$ curl -s -k -H'Content-type: application/json' -X GET https://${BMC_IP}/registries/BiosAttributeRegistry.1.0.0.json | jq
+   # 11,399 lines, so I saved it to a seperate file: smc-420GP-TNAR-registries-json.txt
+   # Basically a dump of all BIOS settings
+
