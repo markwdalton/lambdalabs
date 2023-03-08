@@ -55,26 +55,26 @@
 
 ___
 
-| **On Commercial GPUs like A100’s** |
-|   **You can see these all through:** |
-|      nvidia-smi -q                   |
-|   **You can monitor for memory temperature also:**|
+| **On Commercial GPUs like A100’s**                                                                                                                                     |
+|   **You can see these all through:**                                                                                                                                   |
+|      nvidia-smi -q                                                                                                                                                     |
+|   **You can monitor for memory temperature also:**                                                                                                                     |
 |     nvidia-smi --query-gpu=index,pci.bus_id,uuid,pstate,fan.speed,utilization.gpu,utilization.memory,temperature.gpu,temperature.memory,power.draw --format=csv -l     | 
-|   **And you can watch for remapped memory (requires a reboot/reset of the GPU):**                                                                                          |
+|   **And you can watch for remapped memory (requires a reboot/reset of the GPU):**                                                                                      |
 |    nvidia-smi --query-remapped-rows=gpu_bus_id,gpu_uuid,remapped_rows.correctable,remapped_rows.uncorrectable,remapped_rows.pending,remapped_rows.failure --format=csv |
-|        <dt>8 banks in a row can be remapped, but requires a reboot between each remap.</dt>                                                                                    |
-|        <dt>After 8 banks in a row are remapped the GPU or chassis (SXM) needs to be reworked.</dt>                                                                             |
-|        <dt>If remapped_rows.failure == yes  ; Disable GPU ; Machine needs a RMA to repair</dt>                                                                                 |
-|        <dt>If remapped_rows.pending == yes ; then GPU needs to be reset (commonly high number of aggregate errors).</dt>                                                       |
-|   **And you can watch for Volatile (current boot session - more accurate) and Aggregate (life time of GPU - in theory all but misses some) memory errors:**                |
-|     **To see the various memory errors to track:**                                                                                                                         |
+|        + 8 banks in a row can be remapped, but requires a reboot between each remap.                                                                                   |
+|        + After 8 banks in a row are remapped the GPU or chassis (SXM) needs to be reworked.                                                                            |
+|        + If remapped_rows.failure == yes  ; Disable GPU ; Machine needs a RMA to repair                                                                                |
+|        + If remapped_rows.pending == yes ; then GPU needs to be reset (commonly high number of aggregate errors).                                                      |
+|   **And you can watch for Volatile (current boot session - more accurate) and Aggregate (life time of GPU - in theory all but misses some) memory errors:**            |
+|     **To see the various memory errors to track:**                                                                                                                     |
 |        nvidia-smi --help-query-gpu | grep "ecc.err"                                                                                                                    |
 |    For example:                                                                                                                                                        |
-|     **All volatile memory errors (this boot session or since a GPU reset):**                                                                                               |
+|     **All volatile memory errors (this boot session or since a GPU reset):**                                                                                           |
 |       nvidia-smi --query-gpu=index,pci.bus_id,uuid,ecc.errors.corrected.volatile.dram,ecc.errors.corrected.volatile.sram  --format=csv                                 |
-|     **All volatile uncorrected memory errors:**                                                                                                                           |
+|     **All volatile uncorrected memory errors:**                                                                                                                        |
 |        nvidia-smi --query-gpu=index,pci.bus_id,uuid,ecc.errors.corrected.volatile.dram,ecc.errors.corrected.volatile.sram  --format=csv                                |
-|     **All Aggregate corrected memory errors:**                                                                                                                             |
+|     **All Aggregate corrected memory errors:**                                                                                                                         |
 |       nvidia-smi --query-gpu=index,pci.bus_id,uuid,ecc.errors.uncorrected.aggregate.dram,ecc.errors.uncorrected.aggregate.sram --format=csv                            |
-|     **All Aggregate uncorrected memory errors:**                                                                                                                            |
+|     **All Aggregate uncorrected memory errors:**                                                                                                                       |
 |       nvidia-smi --query-gpu=index,pci.bus_id,uuid,ecc.errors.uncorrected.aggregate.dram,ecc.errors.uncorrected.aggregate.sram --format=csv                            |
