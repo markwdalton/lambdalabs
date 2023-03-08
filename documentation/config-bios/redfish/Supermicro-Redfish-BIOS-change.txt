@@ -1,0 +1,16 @@
+
+export BMC_IP=10.0.10.103
+
+Getting the BIOS configuration in json for Supermicro:
+  curl -s -k -H'Content-type: application/json' -X GET https://${BMC_IP}/registries/BiosAttributeRegistry.1.0.0.json | jq
+
+To write/change the BIOS:
+   Get the license for the chassis: SMC: Licensing: "SFT-DCMS-SINGLE" (or DCMS)
+
+### NOTE: Still needs testing once we have a DCMS license
+
+For changes the License: DCMS is required
+  curl -sk -u ADMIN:PASSWORD --data '{"ACSControl": "Enable"}' -X PATCH https://${BMC_IP}/redfish/v1/Systems/1/Bios
+
+{"error":{"code":"Base.v1_4_0.GeneralError","Message":"A general error has occurred. See ExtendedInfo for more information.","@Message.ExtendedInfo":[{"MessageId":"Base.v1_4_0.OemLicenseNotPassed","Severity":"Warning","Resolution":"Please activate at least one license in above message.","Message":"Not licensed to perform this request. The following licenses DCMS  were needed","MessageArgs":["DCMS "],"RelatedProperties":[""]}]}}
+
