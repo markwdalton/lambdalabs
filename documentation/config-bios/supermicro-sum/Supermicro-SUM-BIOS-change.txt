@@ -11,7 +11,7 @@ Get the config: (You can skip the BMC_IP on the same machine).
 Changing the BIOS:
 ./sum -i $BMC_IP -u ADMIN -p PASSWORD -c ChangeBiosCfg --file BiosCfg.xml
 
-Where BiosCfg.xml: ('stolen' from what we did on Jasnah, it is unique for EACH chassis model and SMT is not needed, it can be done other ways, and many we can change on the kernel line).
+Where BiosCfg.xml:
 
 # This is on the Supermicro 4124GO-NART+
 ======================================================================
