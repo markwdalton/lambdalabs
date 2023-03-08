@@ -3,6 +3,25 @@ NVIDIA GPUs and common questions/issues.
 1. nvidia-smi Driver versus CUDA version
    * nvidia-smi shows the Driver version, and the max version of CUDA the driver supports.
    * The driver needs to support the same or new version of CUDA than you are using.
+
+```
+    $ nvidia-smi | head -8
+    Wed Mar  8 14:19:00 2023       
+    +-----------------------------------------------------------------------------+
+    | NVIDIA-SMI 525.85.05    Driver Version: 525.85.05    CUDA Version: 12.0     |
+    |-------------------------------+----------------------+----------------------+
+    | GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+    | Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+    |                               |                      |               MIG M. |
+    |===============================+======================+======================|
+```
+    This will show Driver Version: 525.85.05 which supports UPTO CUDA Version 12.0
+     * The version of CUDA you are actually using depends on your environment:
+         - What libraries and python modules were installed on your system
+         - What you have installed with pip - which over ride system install
+         - What you have in your virtual environment, to see what you installed:
+             `pip -v list` 
+
 2. The main issue with 'compatability' is with the CUDA or cuDNN for the version of 
    PyTorch or TensorFlow was built with.
    See: <A HREF="https://github.com/markwdalton/lambdalabs/tree/main/python-scripts">Python scripts</A> for examples to see
