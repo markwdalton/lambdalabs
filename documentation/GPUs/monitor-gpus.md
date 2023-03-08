@@ -70,7 +70,7 @@ ___
    + If remapped_rows.failure == yes  ; Disable GPU ; Machine needs a RMA to repair
    + If remapped_rows.pending == yes ; then GPU needs to be reset (commonly high number of aggregate errors).
 
-| ** Also on A100's or commercial GPUs**                                                                                                                                 |
+| **Also on A100's or commercial GPUs**                                                                                                                                 |
 |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |   **And you can watch for Volatile (current boot session - more accurate) and Aggregate (life time of GPU - in theory all but misses some) memory errors:**            |
 |     **To see the various memory errors to track:**                                                                                                                     |
