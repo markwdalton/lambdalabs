@@ -41,7 +41,9 @@ NVIDIA GPUs and common questions/issues.
           *Also you may have local site packages installed here*
 
    Then use a virtual environment for python:
+      <dl>
       <dd>Python venv
       <dd>Docker/Singularity
       <dd>Anaconda/Miniconda - note license changed in the last few years from free - to non-commercial use
+      </dl>
 
