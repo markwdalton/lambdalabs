@@ -1,5 +1,5 @@
 
-**IPMI - is the standard for hardware based platform management**
+<b>IPMI - is the standard for hardware based platform management<\b>
 +This is common on servers, but some workstations have this to a degree.
 
 -> [IPMI Wikipedia](https://en.wikipedia.org/wiki/Intelligent_Platform_Management_Interface)
@@ -14,43 +14,43 @@
 Common command line options:
 ```
 For servers with IPMI:
-**Install ipmitool:**
+<b>Install ipmitool:</b>
    $ sudo apt-get install ipmitool
-**List the users**
+<b>List the users</b>
   $ sudo ipmitool user list
-**Change the password for User ID 2 (from previous ‘user list’)**
+<b>Change the password for User ID 2 (from previous ‘user list’)</b>
   $ sudo ipmitool user set password 2
         Then, enter the new password twice.
-**Cold reset the BMC - normally only needed when the BMC is not getting updates:**
+<b>Cold reset the BMC - normally only needed when the BMC is not getting updates:</b>
   $ sudo ipmitool mc reset cold
-**Print the BMC network information:**
+<b>Print the BMC network information:</b>
   $ sudo ipmitool lan print
-**Print the BMC Event log**
+<b>Print the BMC Event log</b>
   $ sudo ipmitool sel elist
-**Print Sensor information:**
+<b>Print Sensor information:</b>
   $ sudo ipmitool sdr
   $ sudo ipmitool sensor
-**Print Information about the system:**
+<b>Print Information about the system:</b>
   $ sudo ipmitool fru
 
-**IPMI Example setting up a static IP address:**
+<b>IPMI Example setting up a static IP address:</b>
   If you were given:
       IPMI/BMC IP address: 10.0.1.120
       Netmask: 255.255.255.0
       Gateway: 10.0.1.1
 
   Then the configuration would be:
-    **Confirm current settings:**
+    <b>Confirm current settings:</b>
            $ sudo ipmitool lan print 1
-    **Set the IPMI Interface to Static (default is dhcp)**
+    <b>Set the IPMI Interface to Static (default is dhcp)</b>
            $ sudo ipmitool lan set 1 ipsrc static
-    **Set the IP Address:**
+    <b>Set the IP Address:</b>
            $ sudo ipmitool lan set 1 ipaddr 10.0.1.120
-    **Set the netmask for this network:**
+    <b>Set the netmask for this network:</b>
            $ sudo ipmitool lan set 1 netmask 255.255.255.0
-    **Set the Default Gateway**
+    <b>Set the Default Gateway</b>
            $ sudo ipmitool lan set 1 defgw ipaddr 10.0.1.1
-    **Set/confirm that LAN (network) access is enabled:**
+    <b>Set/confirm that LAN (network) access is enabled:</b>
            $ sudo ipmitool lan set 1 access on
 
 Common request is getting the sensor and event log output..
@@ -62,7 +62,7 @@ Common request is getting the sensor and event log output..
       Or from a remote linux machine:
          $ ipmitool -I lanplus -H IP_ADDRESS -U ADMIN -P "PASSWORD" sel elist >& ipmi-sel.txt
          $ ipmitool -I lanplus -H IP_ADDRESS -U ADMIN -P "PASSWORD" sdr >& ipmi-sdr.txt
-            ** Where 'PASSWORD' would be your IPMI password, and IP_ADDRESS is your  
+            -> Where 'PASSWORD' would be your IPMI password, and IP_ADDRESS is your 
                machines BMC/IPMI ip address.
  
 Or at least the Web GUI can save the cvs of the eventlog.
