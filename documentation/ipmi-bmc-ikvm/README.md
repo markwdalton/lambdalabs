@@ -12,7 +12,6 @@
    +ilo - for HP
 
 Common command line options:
-```
 For servers with IPMI:
 <b>Install ipmitool:</b>
    $ sudo apt-get install ipmitool
@@ -67,4 +66,3 @@ Common request is getting the sensor and event log output..
  
 Or at least the Web GUI can save the cvs of the eventlog.
      BMC/IPMI -> Logs and Reports -> Event Log -> Save to excel (CSV).
-```
