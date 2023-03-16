@@ -1,0 +1,16 @@
+name: tensorrt_quick
+
+channels:
+  - conda-forge
+  - nvidia
+  - defaults
+
+dependencies:
+  - tensorflow
+  - pip
+  - pandas
+  - matplotlib
+  - scikit-learn
+  - numpy
+  - pip:
+     - nvidia-tensorrt

@@ -1,0 +1,10 @@
+
+Set the BIOS to boot mode:
+   * Boot tab -> Boot Mode -> UEFI
+   * PCIE slot OPROM is set to EFI
+   * Save and Exit
+
+Go to Bios settings again:
+   * Advanced > Megaraid 9460-16i
+     You should see the Megarid <VERSION> settings on this section
+

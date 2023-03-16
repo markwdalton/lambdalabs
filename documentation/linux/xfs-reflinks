@@ -1,0 +1,21 @@
+
+Compare filesystems:
+  https://www.salvagedata.com/btrfs-zfs-xfs-ext4-how-are-they-different/
+
+Reflinks vs symlinks vs hard links, and how they can help machine learning projects - April 2019:
+  https://dev.to/robogeek/reflinks-vs-symlinks-vs-hard-links-and-how-they-can-help-machine-learning-projects-1cj4
+XFS and Reflinks:
+XFS - Data Block Sharing (Reflink) - Jan 2020:
+  https://blogs.oracle.com/linux/post/xfs-data-block-sharing-reflink
+XFS, Reflink and Fast Clone. Made for each other
+  https://prog.world/xfs-reflink-and-fast-clone-made-for-each-other/
+XFS, Reflinks and Deduplication - January 2017:
+  https://strugglers.net/~andy/blog/2017/01/10/xfs-reflinks-and-deduplication/
+New tricks for XFS - Feb 2018:
+  https://lwn.net/Articles/747633/
+
+The two sides of reflink() - March 2009:
+  https://lwn.net/Articles/331808/
+Old SGI: XFS Algorithms & Data Structures - 2006
+http://ftp.ntu.edu.tw/linux/utils/fs/xfs/docs/xfs_filesystem_structure.pdf
+

@@ -1,0 +1,15 @@
+
+1. The simplest way to find if which versions are available is:
+   $ pip install package==?
+     * pip will list the versions available
+
+2. Add a function:
+   a. Add a function to your .bashrc:
+      $ echo "function pipvers() { curl -s https://pypi.org/rss/project/$1/releases.xml | sed -n 's/\s*<title>\([^<]*\).*/ \1/p' | paste -sd, ;} " >> ~/.bashrc
+
+   b. Source your ~/.bashrc to make it active:
+      $ . ~/.bashrc
+
+   c. Example Use, this is to list the versions available (example for the segmentation-models-3D):
+      $ pipvers segmentation-models-3D
+        PyPI recent updates for segmentation-models-3D, 1.0.3, 1.0.2, 1.0.1, 1.0

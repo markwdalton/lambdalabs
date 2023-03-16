@@ -1,0 +1,83 @@
+1. Keras is not running at ours using the current lambda stack. We use a standard example from https://www.tensorflow.org/tutorials/keras/classification and tested on a new venv. We get errors when setting up a keras sequential model, line 22
+   * 'new venv' would likely ignore the Lambda Stack install.
+   * You can install venv so that it still looks at the default install:
+         $ python -m venv --system-site-packages myvenv
+         $ . ./myvenv/bin/activate
+     And both the Example in the code to test Keras and the jupyter notebook look to work correctly.
+         https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/classification.ipynb
+     The test script:
+        import tensorflow as tf
+        # Helper libraries
+        import numpy as np
+        import matplotlib.pyplot as plt
+
+        print(tf.__version__)
+
+2. The error you are seeing:
+   AttributeError: module 'tensorflow.compat.v2.__internal__.tracking' has no attribute 'TrackableSaver'
+
+   * tracking is not in the example, but perhaps other software you may be installing.
+
+   For python the first step to debugging is seeing what other software you may have installed:
+      pip -v list > pip.txt   
+      * This will shows you the packages you previously installed that affect your current environment.
+      * If you install in your users local environment, it affects ALL Virtual environments: venv, virtualenv and Anaconda
+        Those packages are installed in ~/.local
+      * Also some sites install packages in /usr/local, that is for local sites softare, and affects ALL users.
+      
+  So the fastest way to clean these two areas is:
+      $ mv ~/.local ~/.local.bak
+      $ sudo mv /usr/local /usr/local.bak
+
+  This is the reason I recommend:
+     * Docker
+     * Any 'pip' uses is done in a virtual env: docker, venv, virtualenv, or Anaconda
+
+
+3. We actually had problems with this and our last update of the Lambda-Stack. Do you have some test-script, which we can run after each update to make sure that the stack is working properly?
+    * https://github.com/keras-team/keras-io/tree/master/examples
+    * But examples:
+        If you use Jupyter notebook you can go to examples/vision/ipynb/
+
+   * For a basic test, just load keras:
+     NOTE: I normally use 'TF_CPP_MIN_LOG_LEVEL=3' to get rid of all the noisy verbose messages by default from Tensorflow,
+           And when debugging run without 'TF_CPP_MIN_LOG_LEVEL=3'
+     So a quick example would be:
+        TF_CPP_MIN_LOG_LEVEL=3 python -c "import tensorflow as tf ; from tensorflow import keras ; from tensorflow.keras import layers ; \
+                print('GPU name: ', tf.config.experimental.list_physical_devices('GPU'))"
+
+4. Some more general questions, which we would like to clarify in this context:
+   a. How do you recommend to set up a multi-user environment? Users should use GPUs and work with keras.
+      * The normal use does not affect other users.
+      * To affect other users, you would need to be 'root' or use 'sudo'.   So do not give 'sudo' out would be the simplest way.
+        And by default other users do not have sudo.
+        (If software is install with 'apt' or into /usr/local, /usr, it will affect other users.
+   b. The big issue users affecting themselves.
+      * The biggest problem is the use of 'pip' without using a Virtual environment, will often break other codes.
+        'pip install -r requirements.txt' - Random software in githubs, blindly installs software.  You should either go through the
+             requirements.txt, and always install in its own 'python -m venv --system-site-defaults myvenv' 
+      * Or use docker or Anaconda can work also
+   c. In particular, is there a multi-user environment, which does not allow users to install their own packages? This gave us problems in the past…
+      * By default users cannot install packages, they would have to use 'sudo'.
+        - Basically a repeat of the above.
+   d. Do you have experience with JupyterHub? We use this currently as multi-user environment, but there we also have the problem that users install their own packages, update tensorflow, etc, which results in problems. Maybe you have some best-practices for us?
+      * Yes it can be a issue, and you should use: docker, venv, virtualenv or anaconda.
+      * Again users should not install with 'apt' or have 'sudo' by default.   Or they can install/remove.
+
+5. Also always look at the script before running.  Python is known for scripts doing bad practices, things like:
+     * pip installs in the script
+     * sudo apt installs in the script
+     * blindly running 'pip install -r requirements', or worse with sudo
+     * blindly running 'python setup install', or worse with sudo
+   All package installs should be done individually or inspected first.
+   requirements.txt commonly are 'lazy' by owners, and they do not narrow down the list of real requirements commonly.
+   So this is another reason to only use them in a indivaul venv/docker
+
+We have a example block on the use of:
+   * Docker: https://lambdalabs.com/blog/nvidia-ngc-tutorial-run-pytorch-docker-container-using-nvidia-container-toolkit-on-ubuntu
+   * python venv - not public, but I can share it
+     
+   * Anaconda:  https://lambdalabs.com/blog/setting-up-a-anaconda-environment
+     One thing to add for Anaconda is the setup of where cuDNN is installed:
+        ## Anaconda/Miniconda do not correctly setup the path for this library (even though it installs it).
+        export LD_LIBRARY_PATH=${CONDA_PREFIX}/lib:${LD_LIBRARY_PATH}

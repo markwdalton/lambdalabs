@@ -1,0 +1,42 @@
+
+Show the default target/runlevel:
+   systemctl get-default
+Set the target to multi-user:
+   sudo systemctl set-default multi-user
+Set the default target to graphical:
+   sudo systemctl set-default graphical
+Show dependencies:
+   systemctl list-dependencies <target>
+   example: systemctl list-dependencies graphical.target
+
+Temporarily change to multi-user:
+   sudo systemctl isolate multi-user
+Temporarily change to graphical:
+   sudo systemctl isolate graphical
+
+Timers (crons) in systemd:
+ List systemd timers:
+   systemctl list-unit-files -t timer 
+   systemctl list-timers
+
+List status for a given timer:
+   systemctl status <timer>
+   Example: systemctl status logrotate.timer
+
+   systemctl list-dependencies <timer>
+   Example: systemctl list-dependencies logrotate.timer
+
+Masking - making them 'invisible' effectively:
+This would disable sleep/hibernate/suspend:
+  sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+
+To unmask a startup script, in this example 'nvidia-persistenced'
+  $ sudo systemctl mask nvidia-persistenced
+
+  Then make sure it is enabled and started
+    $ sudo systemctl enable nvidia-persistenced
+    $ sudo systemctl start nvidia-persistenced
+
+  Then check the status:
+    $ systemctl status nvidia-persistenced
+

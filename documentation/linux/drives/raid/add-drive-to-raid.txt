@@ -1,0 +1,40 @@
+====================
+Partition new drives:
+====================
+1. Remove current partitions (if any):
+  $ sudo fdisk /dev/sd[?]     (example 'sudo fdisk /dev/sde')
+      remove partitions
+2. Zero the superblock:
+  $ sudo mdadm --zero-superblock /dev/sd[?]
+3. Create a RAID partition 1 
+$ sudo parted -a optimal /dev/sd[?]
+   Place a flag gpt or mbr
+      (parted) mklabel gpt
+   Create partitions
+    (parted) mkpart primary ext4 0% 100%
+   Mark partition as software raid partition
+    (parted) set 1 raid on
+   Verify its alligned
+    (parted) align-check
+        optimal
+         1
+   Show results
+    (parted) print
+
+===================
+Now add to the RAID:
+===================
+1. See what drives and raid level:
+   cat /proc/mdstat
+   df -h /dev/md0
+2. Partition the drive and set it up for raid.
+3. Add the Drive to the RAID (if it is raid md0 and this is sde1
+   mdadm --add /dev/md0 /dev/sde1
+   * At this stage the drive should be a 'spare drive'
+4. Look at the /proc/mdstat
+   If it has a '(S)' it should be a spare drive
+5. Grow the RAID to let this drive be part of the RAID array (assuming this is the 5th drive)
+   mdadm --grow --raid-devices=5 /dev/md0
+6. Confirm expanded:
+   cat /proc/mdstat
+   df -h /dev/md0

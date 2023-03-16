@@ -1,0 +1,33 @@
+Below is a example of setting up pytorch in python venv:
+
+
+user-name@tensorbook:~$ mkdir python
+user-name@tensorbook:~$ cd python
+user-name@tensorbook:~/python$ python -m venv venv
+user-name@tensorbook:~/python$ source ./venv/bin/activate
+(venv) user-name@tensorbook:~/python$ pip install torchvision
+Collecting torchvision
+  Downloading torchvision-0.11.1-cp38-cp38-manylinux1_x86_64.whl (23.3 MB)
+     |████████████████████████████████| 23.3 MB 7.4 MB/s 
+Collecting torch==1.10.0
+  Downloading torch-1.10.0-cp38-cp38-manylinux1_x86_64.whl (881.9 MB)
+     |████████████████████████████████| 881.9 MB 11 kB/s 
+Collecting pillow!=8.3.0,>=5.3.0
+  Downloading Pillow-8.4.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.1 MB)
+     |████████████████████████████████| 3.1 MB 8.7 MB/s 
+Collecting numpy
+  Downloading numpy-1.21.4-cp38-cp38-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (15.7 MB)
+     |████████████████████████████████| 15.7 MB 10.7 MB/s 
+Collecting typing-extensions
+  Downloading typing_extensions-4.0.1-py3-none-any.whl (22 kB)
+Installing collected packages: typing-extensions, torch, pillow, numpy, torchvision
+Successfully installed numpy-1.21.4 pillow-8.4.0 torch-1.10.0 torchvision-0.11.1 typing-extensions-4.0.1
+
+(venv) user-name@tensorbook:~/python$ python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Current Device: ", torch.cuda.current_device()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.version) ; print("pytorch file: ", torch.__file__)'
+
+Is available:  True
+Current Device:  0
+Pytorch CUDA Compiled version:  10020
+Pytorch version:  <module 'torch.version' from '/home/user-name/python/venv/lib/python3.8/site-packages/torch/version.py'>
+pytorch file:  /home/user-name/python/venv/lib/python3.8/site-packages/torch/__init__.py
+

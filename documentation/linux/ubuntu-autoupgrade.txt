@@ -1,0 +1,29 @@
+
+
+I would change the wording. 
+'Software that was installed from outside of Ubuntu', since it upgrades other
+packages if they are added to the repository list (which is common).
+
+Autoupdates are setup by default for:
+  Ubuntu base
+  Ubuntu distribution for security - general, apps-security and infrastructure
+
+General updates, proposed, and backports or other repositories are not updated 
+automatically by default. 
+   
+The settings for unattended upgrades is in: 
+    /etc/apt/apt.conf.d/50unattended-upgrades
+
+You can see packages that are available to upgrade by:
+    $ sudo apt-get update
+    $ apt list --upgradeable
+
+The following will update any package from Ubuntu, Lambda stack (if installed) or
+other repositories added to the system (/etc/apt/soruces.list.d/* or /etc/apt/soruces.list)
+    $ sudo apt-get update && sudo apt-get upgrade
+
+And yes to the Examples of softwares it does not update:
+    Software installed in virtual environments: pip, anaconda, python venv
+    Software installed from a tarball
+    Software built from source
+

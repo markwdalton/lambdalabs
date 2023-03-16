@@ -1,0 +1,50 @@
+
+Intial setup:
+Check your installed packages:
+   pip -v list | grep -v "/usr/lib/python3/dist-packages"
+    * This will show you any package installed that is not part of Lambda Stack or Ubuntu
+      (Ideally these other packages should only be in a virtual environment Python venv or Anaconda/Miniconda)
+    * The Common fix is to:
+       Move the ~/.local out of the way.  This is where 'pip' installs if you are not in a virtual env
+          $ mv ~/.local ~/.local.bak
+       Move the /usr/local, this is where local site software is suppose to be installed, but NVIDIA sometimes
+       installs their software there, and pip installs packages there if you run 'sudo pip install'   
+          $ sudo mv /usr/local /usr/local.bak
+       Or you can remove each package from: 'pip -v list | grep "/usr/local"'
+          $ sudo pip uninstall package_name
+
+      $ pip -v list | grep -v "/usr/lib/python3/dist-packages"
+       * This will show you any package installed that is not part of Lambda Stack or Ubuntu
+         (Ideally these other packages should only be in a virtual environment Python venv or Anaconda/Miniconda
+
+   Make sure you are not inside of Anaconda/Miniconda
+      $ deactivate  # Deactivates python venv environments
+      $ conda deactivate # Deactivates a layer of Anaconda/Minicond keep doing that until there is no (base) or other.
+
+
+1. Install python3-venv
+    $ sudo apt update
+    $ sudo apt install python3-venv
+2. Create a new environment 
+    $ python -m venv torch_cuda_11-7
+3. Activate the environment:
+    $ . ./torch_cuda_11-7/bin/activate
+4. Install the required packages (currently pytorch+cuda-11.7  is default
+    $ pip3 install torch torchvision torchaudio
+      # This can be done explicitly with the version also:
+      #   $ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu117
+
+   You can look at the matrix or archive at: https://pytorch.org/get-started/locally/
+    >  If you wanted to install for Pytorch+CUDA 11.6
+    >  $ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
+
+5. Run a simple test with the base install:
+    (torch_cuda_11-7) mark@lambda-dual:~/lambda/documentation/lambdastack-versioning$ python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Current Device: ", torch.cuda.current_device()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.version) ; print("pytorch file: ", torch.__file__)'
+
+    Is available:  True
+    Current Device:  0
+    Pytorch CUDA Compiled version:  11070
+    Pytorch version:  <module 'torch.version' from '/home/mark/lambda/torch_cuda_11-7/lib/python3.10/site-packages/torch/version.py'>
+    pytorch file:  /home/mark/lambda/torch_cuda_11-7/lib/python3.10/site-packages/torch/__init__.py
+
+

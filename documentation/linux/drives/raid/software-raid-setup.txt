@@ -1,0 +1,126 @@
+
+This would all be run as root or with sudo.
+
+General RAID information:
+    Raid 0 – Striping and is fastest, but no redundancy, if a drive is lost all data is lost 
+             and the filesystem needs to be rebuilt. 
+    RAID 1 – Mirrored – Redundant drive, and the mirror needs to be written to also. 
+             (Also twice as many disks for the same space).  You can loose one drive. 
+    RAID 5 – slower than Raid 1 or 10 as the parity has to be computed– and you can loose
+             one drive per raid set without any data loss. It is not recommended to have
+             your OS partition over software RAID 5 or 6.
+    RAID 6 - similar to raid 5 but it has two parity drives and could survive two drive 
+             failures in each raid set.
+    RAID 10 – Offers Striping, fast access, and redundancy.  Again this requires twice
+              as many drives for the same space
+
+Choosing Drives and basic RAID understanding:
+  1. lsblk to list the drives and choose them carefully.
+      * Reformatting the drive will remove any data on that drive.
+  2. Ideal is all drives the same Mnfg, Model, Size and Speed (you can do  any)
+      * If the drives different, you will see:
+          - Performance of the slowest drive
+          - Size of the smallest drive
+
+IMPORTANT: (to confirm which drive is which)
+lsblk
+    1. New drives will not be partitioned (if needed confirm the drives are not already used).
+    2. Sizes can also be used to determine which drive
+       (we can use 'sudo smartctl -x /dev/nvme#' to see models, etc).
+
+NOTE: If using XFS, you need to install xfsprogs
+      sudo apt-get update && sudo apt-get install xfsprogs
+      You can use the more common ext4 also, it all depends on inode usage concerns
+      performance is similar.
+
+To create raid 1 in live linux system
+  $ sudo parted -a optimal /dev/nvme1
+  $ sudo parted -a optimal /dev/nvme2
+  etc ...
+  And this will have options in the tool:
+  # Place a flag gpt or mbr
+  (parted) mklabel gpt
+  # Create partitions
+  (parted) mkpart primary ext4 0% 100%
+  # Mark partition as software raid partition
+  (parted) set 1 raid on
+  # Verify its alligned
+  (parted) align-check
+     optimal
+  # Show results
+  print
+
+then repeat for each drive...
+
+====================
+RAID setup examples:
+====================
+Raid 0 array
+  sudo mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/nvme1n1p1 /dev/nvme2n1p1
+
+Or for Raid 1 array (only 2+ drives but all mirrors)
+  sudo mdadm --create /dev/md0 --level=1 --raid-devices=2 --spare=0 /dev/nvme1n1p1 /dev/nvme2n1p1
+
+Or for Raid 5 array with 8 drives:
+   sudo mdadm --create /dev/md0 --level=5 --raid-devices=8 /dev/sda1 /dev/sdb1 /dev/sdc1 /dev/sdd1 /dev/sde1 /dev/sdf1 /dev/sdg1 /dev/sdh1
+
+Check results
+   cat /proc/mdstat
+
+
+======================
+Format the filesystem: (performance about the same just # of files)
+======================
+# Format array - similar performance but depending on usage of millions of small files
+#             - you may hit inode issues
+$ sudo mkfs.ext4 /dev/md0
+
+or 
+
+# Format for XFS: - handles larger numbers of files better (millions) no inode issues
+$ sudo mkfs.xfs /dev/md0
+
+============================
+Finish/check the Raid config
+============================
+
+# Write raid to a mdadm.conf
+$ sudo mdadm --detail --scan >> /etc/mdadm/mdadm.conf
+
+# Update initramfs
+$ sudo update-initramfs -u
+
+# Check the raid:
+ $ sudo mdadm -D /dev/md0
+
+
+========================
+Mount and write to fstab
+========================
+
+For example for a mount point of /data:
+
+$ sudo mkdir /data
+$ sudo chmod 1777 /data
+$ sudo mount /dev/md0 /data
+
+(And setup the /etc/fstab).
+
+# Find the UUID for the /dev/md0
+$ blkid /dev/md0
+
+# Add the md0's UUID to the /etc/fstab
+
+$ blkid /dev/md0
+/dev/md0: UUID="a6d39b9b-d4e4-4fa1-b98c-4a73e7ba0f83" TYPE="xfs"  (or ext4)
+
+
+echo "# Add RAID md0 to mount on /data" | sudo tee -a /etc/fstab
+echo "UUID=a6d39b9b-d4e4-4fa1-b98c-4a73e7ba0f83 /data ext4 defaults,relatime,rw 0 2" | sudo tee -a /etc/fstab
+
+or if you choose xfs:
+echo "# Add RAID md0 to mount on /data" >> /etc/fstab
+echo "UUID=a6d39b9b-d4e4-4fa1-b98c-4a73e7ba0f83 /data xfs defaults,discard,relatime,rw 0 2" | sudo tee -a /etc/fstab
+mount -a
+
+

@@ -42,14 +42,17 @@
 | **Shows the linux top process based on CPU, memory (rss) virtual memory**                                                                                                  |
 |   top                                                                                                                                                                  |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Alternate view of top:**                                                                                                                                                 |
+| **Alternate view of top:**                                                                                                                                             |
 |   htop                                                                                                                                                                 |
-| **View the processes on GPUs**                                                                                                                                             |
+| **View the processes on GPUs**                                                                                                                                         |
 |   nvidia-smi pmon                                                                                                                                                      |
 |   nvidia-smi dmon -s pc                                                                                                                                                |
-| **Show GPU view power, temp, memory on GPUs over time**                                                                                                                    |
+|   nvtop                  |
+|   Performance monitoring of GPUs:
+   https://lambdalabs.com/blog/keeping-an-eye-on-your-gpus-2/                                                                                                            |
+| **Show GPU view power, temp, memory on GPUs over time**                                                                                                                |
 |   nvidia-smi dmon                                                                                                                                                      |
-| **Show GPU stats and environment over time in CSV format**                                                                                                                 |
+| **Show GPU stats and environment over time in CSV format**                                                                                                             |
 |   nvidia-smi --query-gpu=index,pci.bus_id,uuid,fan.speed,utilization.gpu,utilization.memory,temperature.gpu,power.draw --format=csv -l                                 |
 |   nvidia-smi --help-query-gpu                                                                                                                                          |
 

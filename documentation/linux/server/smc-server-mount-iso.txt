@@ -1,0 +1,41 @@
+
+Som servers we ship do not have the license to allow mounting the ISO from the web interface.
+  * We should provide this on all servers if possible.
+
+A work around: 
+  Download the Super Micro IMPI utility at the following url. 
+  Running this utility on a separate linux machine, point to the IP address of the BMC/IPMI on the host 
+     you want to upgrade.
+
+   1. Download:
+         https://www.supermicro.com/en/support/resources/downloadcenter/smsdownload?category=IPMI
+   2. Uncompress the downloaded archive.
+   3. Run the SMCIPMITool command:
+      $ sudo /opt/SMCIPIMTool/SMCIPMITool IPADDR USER PASSWORD shell
+           * IP_ADDR: the BMC/IPMI address for the machine to be upgraded
+           * USER: ADMIN on Supermicro machines by default (same as used on the web GUI)
+           * PASSWORD: Same as used on the BMC web GUI.
+   4. Attach the virtual media in side the script:
+       vmwa dev2iso /location/of/your.iso
+       ** Do not exit SMCIPIMTool shell until you are fully done with the mounted ISO.
+   5. From the machine you want to upgrade use the web GUI to reinstall.
+   6. When install is fully complete, you can disconnect the virtual media:
+       vmwa dev2stop
+
+=================
+Below is an example of the output of a successful operation.
+ 
+192.168.10.9 X11SLL (S0/G0) 07:28 AST2400>vmwa dev2iso /root/CentOS-7-x8664-LiveGNOME-2003.iso ……………Mounting ISO file: /root/CentOS-7-x8664-LiveGNOME-2003.iso
+Device 2 :VM Plug-In OK!!
+ 
+Please do not exit the SMCIPIMTool shell until you are fully done with the mounted ISO.
+ 
+When you're finished, disconnect the virtual media using the following command.
+ 
+vmwa dev2stop
+ 
+Below is an example of successfully disconnecting the virtual media.
+ 
+192.168.10.9 X11SLL (S0/G0) 07:29 AST2400>vmwa dev2stop
+Device 2 :VM Plug-Out OK!! Stop!!
+

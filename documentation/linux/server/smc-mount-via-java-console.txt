@@ -1,0 +1,12 @@
+
+Use the Java Console
+  - I used icedTea for the viewer
+  * VirtualMedia->Storage
+        - Select the ISO  -> NOTE mine is on my home network local drive (the reason a local USB would be better)
+        - Select file
+        - Select 'Plug-in'
+        - select 'ok'
+Boot
+  - F11 - for boot mentu
+  - FI: ATEN Select Virtual CDROM - on device
+

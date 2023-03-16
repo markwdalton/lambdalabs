@@ -1,0 +1,77 @@
+
+Intial setup:
+Check your installed packages:
+   pip -v list | grep -v "/usr/lib/python3/dist-packages"
+    * This will show you any package installed that is not part of Lambda Stack or Ubuntu
+      (Ideally these other packages should only be in a virtual environment Python venv or Anaconda/Miniconda)
+    * The Common fix is to:
+       Move the ~/.local out of the way.  This is where 'pip' installs if you are not in a virtual env
+          $ mv ~/.local ~/.local.bak
+       Move the /usr/local, this is where local site software is suppose to be installed, but NVIDIA sometimes
+       installs their software there, and pip installs packages there if you run 'sudo pip install'   
+          $ sudo mv /usr/local /usr/local.bak
+       Or you can remove each package from: 'pip -v list | grep "/usr/local"'
+          $ sudo pip uninstall package_name
+
+      $ pip -v list | grep -v "/usr/lib/python3/dist-packages"
+       * This will show you any package installed that is not part of Lambda Stack or Ubuntu
+         (Ideally these other packages should only be in a virtual environment Python venv or Anaconda/Miniconda
+
+   Make sure you are not inside of Anaconda/Miniconda
+      $ deactivate  # Deactivates python venv environments
+      $ conda deactivate # Deactivates a layer of Anaconda/Minicond keep doing that until there is no (base) or other.
+
+
+1. Install python3-venv
+    $ sudo apt update
+    $ sudo apt install python3-venv
+2. Create a new environment 
+    $ python -m venv --system-site-packages myvenv
+    (--system-site-packages allows it to used the default installed packages, and new packages
+      override in the environment and keep them versioned - not affecting the default or versioned environment)
+3. Activate the environment:
+    $ ./myvenv/bin/activate
+4. Run a simple test with the base install:
+   TF_CPP_MIN_LOG_LEVEL=3 python -c 'import tensorflow as tf; print("\nTensorflow version: ",tf.__version__, "\nTensorflow file: ",tf.__file__) ; print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices("GPU")))'
+5. Install packages (like tensorrt).
+   $ pip install nvidia-tensorrt
+
+   On a older python3.8 release (still the latest 525.60.* driver, CUDA 11.8, tensorflow 11.2), I needed to install
+   $ pip install nvidia-pyindex
+   $ pip install nvidia-tensorrt
+
+  Other dependencies, just to make sure they are installed (default current version works fine):
+   $ pip install pandas scikit-learn matplotlib numpy
+
+6. The good news is nvidia-tensorrt does install the libraries in the correct place so they are picked up.
+   (By default Anaconda/Miniconda does not for cuDNN, and I need to setup up the LD_LIBRARY_PATH)
+
+7. Run the code:
+   Quietly (without the verbose tensorflow messages):
+     $ TF_CPP_MIN_LOG_LEVEL=3 python quick.py
+   Or by default if you want to see the specifics:
+     $ python quick.py
+
+Example:
+mark@lambda-dual:~/lambda/documentation/lambdastack-python-venv-tensorflow$ python -m venv --system-site-packages myvenv
+
+mark@lambda-dual:~/lambda/documentation/lambdastack-python-venv-tensorflow$ . myvenv/bin/activate
+(myvenv) mark@lambda-dual:~/lambda/documentation/lambdastack-python-venv-tensorflow$ 
+(myvenv) mark@lambda-dual:~/lambda/documentation/lambdastack-python-venv-tensorflow$ TF_CPP_MIN_LOG_LEVEL=3 python -c 'import tensorflow as tf; print("\nTensorflow version: ",tf.__version__, "\nTensorflow file: ",tf.__file__) ; print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices("GPU")))'
+
+   Tensorflow version:  2.10.1 
+   Tensorflow file:  /usr/lib/python3/dist-packages/tensorflow/__init__.py
+   Num GPUs Available:  2
+   
+      * Note if it is not seeing your GPUs, you have a basic issue
+          1. Check: nvidia-smi
+   
+Then install other packages that you need customized.
+  (myvenv) mark@tensorbook-server:~$ pip install nvidia-pyindex
+  (myvenv) mark@tensorbook-server:~$ pip install nvidia-tensorrt
+
+  (myvenv) mark@tensorbook-server:~$ TF_CPP_MIN_LOG_LEVEL=3 python quick.py
+    * quiet run output
+  (myvenv) mark@tensorbook-server:~$ python quick.py
+    * verbose output
+

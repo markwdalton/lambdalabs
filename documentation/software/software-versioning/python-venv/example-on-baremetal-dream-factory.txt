@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Install python-venv:
+sudo apt update
+sudo apt install python3-venv
+
+# Setup a Python venv
+python -m venv --system-site-packages dream_venv
+. ./dream-venv/bin/activate
+
+# Install packages:
+wget -qO- https://raw.githubusercontent.com/AUTOMATIC1111/stable-diffusion-webui/master/webui.sh | bash
+cd ~/stable-diffusion-webui/
+pip install -r requirements.txt
+# Download models
+wget -O /home/ubuntu/stable-diffusion-webui/models/Stable-diffusion/realisticVisionV13.LtFu.safetensors  https://civitai.com/api/download/models/6987
+
+# Download Dream Factory
+git clone https://github.com/rbbrdckybk/dream-factory && \
+cd dream-factory && \
+python setup.py --shell --force
+
+sed -iE 's/SD_LOCATION =.*/SD_LOCATION = \/home\/ubuntu\stable-diffusion-webui/' config.txt
+sed -iE 's/WEBSERVER_NETWORK_ACCESSIBLE =.*/WEBSERVER_NETWORK_ACCESSIBLE = yes/' config.txt
+
+python dream-factory.py

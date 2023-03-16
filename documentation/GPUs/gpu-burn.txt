@@ -1,0 +1,12 @@
+
+
+```
+git clone https://github.com/wilicc/gpu-burn
+cd gpu-burn
+make CUDAPATH=/usr
+./gpu_burn 300 | tee -a gpu-burn.txt
+```
+
+And could you please send the resulting 'gpu-burn.txt' file 
+If a GPU does fail please run `sudo nvidia-bug-report.sh` and
+      share the resulting 'nvidia-bug-report.log.gz' file

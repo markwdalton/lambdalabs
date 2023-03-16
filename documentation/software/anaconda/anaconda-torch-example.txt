@@ -1,0 +1,47 @@
+
+NOTE: The nvidia channel and pytorch channel.
+
+Fixing the base environment was just adding the needed CUDA and pytorch:
+1. Get into the Base environment:
+   $ conda activate
+2. Update with pytorch with cuda support:
+   (base) $ conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+
+
+To create a specific environment  (as you may need multiple environments for different codes or tests):
+1. Install a environment: (NOTE: this was with pytorch-cuda=11.6
+   $ conda create --name torch_gpu pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia
+
+2. Activate the environment:
+   $ conda activate torch_gpu
+
+3. Run a quick test to show it sees the GPUs: (This is with the pytorch-cuda=11.7):
+   (torch_gpu) $ python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Current Device: ", torch.cuda.current_device()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.version) ; print("pytorch file: ",torch.__file__)'
+
+Is available:  True
+Current Device:  0
+Pytorch CUDA Compiled version:  11070
+Pytorch version:  <module 'torch.version' from '/home/mark/miniconda3/envs/torch_gpu/lib/python3.10/site-packages/torch/version.py'>
+pytorch file:  /home/mark/miniconda3/envs/torch_gpu/lib/python3.10/site-packages/torch/__init__.py
+
+4. Show which packages were installed for pytorch installed (and shows he cuda/cudnn version)
+
+   (torch_gpu) $ conda list | egrep "torch|cudatoolkit"
+   # packages in environment at /home/mark/miniconda3/envs/torch_gpu:
+   pytorch                   1.13.0          py3.10_cuda11.7_cudnn8.5.0_0    pytorch
+   pytorch-cuda              11.7                 h67b0de4_0    pytorch
+   pytorch-mutex             1.0                        cuda    pytorch
+   torchaudio                0.13.0              py310_cu117    pytorch
+   torchvision               0.14.0              py310_cu117    pytorch
+
+5. Show where the cudnn library is installed:
+   $ find ${CONDA_PREFIX} -name '*libcudnn.so*'
+   /home/mark/miniconda3/envs/torch_gpu/lib/python3.10/site-packages/torch/lib/libcudnn.so.8
+
+6. If there are issues for pytorch finding the cuDNN (tensorflow does not install or set the path), but pytorch
+   looks like it sets it up so pytorch should find it.
+
+   Setup the library path so applications can find the libraries:
+   ## Anaconda/Miniconda does not correctly setup the path for this library (even though it installs it).
+   export LD_LIBRARY_PATH=${CONDA_PREFIX}/lib/python3.10/site-packages/torch/lib:${LD_LIBRARY_PATH}
+

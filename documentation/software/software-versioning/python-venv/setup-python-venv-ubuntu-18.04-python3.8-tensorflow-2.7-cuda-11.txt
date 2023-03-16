@@ -1,0 +1,133 @@
+
+From the tensorflow.org/install/source:
+Version	           Python version   Compiler	Build tools	cuDNN	CUDA
+tensorflow-2.7.0   3.7-3.9	    GCC 7.3.1	Bazel 3.7.2	8.1	11.2
+
+https://developer.nvidia.com/cuda-toolkit-archive
+
+
+1. Install CUDA 11.2.2, cuDNN in alternate location
+   https://developer.nvidia.com/cuda-11.2.2-download-archive?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1804
+
+2. The Run local way:
+mark@tensorbook:~/virtual$ wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux.run
+mark@tensorbook:~/virtual$ sudo sh cuda_11.2.2_460.32.03_linux.run
+  
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ Existing package manager installation of the driver found. It is strongly    │
+│ recommended that you remove this before continuing.                          │
+│ Abort                                                                        │
+│ Continue    <---- Select Continue and hit return                             │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ Up/Down: Move | 'Enter': Select                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  End User License Agreement                                                  │
+│  --------------------------                                                  │
+│                                                                              │
+│  NVIDIA Software License Agreement and CUDA Supplement to                    │
+│  Software License Agreement.                                                 │
+│                                                                              │
+│                                                                              │
+│  Preface                                                                     │
+│  -------                                                                     │
+│                                                                              │
+│  The Software License Agreement in Chapter 1 and the Supplement              │
+│  in Chapter 2 contain license terms and conditions that govern               │
+│  the use of NVIDIA software. By accepting this agreement, you                │
+│  agree to comply with all the terms and conditions applicable                │
+│  to the product(s) included herein.                                          │
+│                                                                              │
+│                                                                              │
+│  NVIDIA Driver                                                               │
+│                                                                              │
+│                                                                              │
+│──────────────────────────────────────────────────────────────────────────────│
+│ Do you accept the above EULA? (accept/decline/quit):                         │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Type in accept and hit return
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ CUDA Installer                                                               │
+│ - [ ] Driver                                                                 │
+│      [ ] 460.32.03                                                           │
+│ + [X] CUDA Toolkit 11.2                                                      │
+│   [ ] CUDA Samples 11.2                                                      │
+│   [ ] CUDA Demo Suite 11.2                                                   │
+│   [ ] CUDA Documentation 11.2                                                │
+│   Options                                                                    │
+│   Install                                                                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ Up/Down: Move | Left/Right: Expand | 'Enter': Select | 'A': Advanced options │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  De-select Driver
+    and optionally other Samples, Demos, Documentation
+
+  Keep CUDA Toolkit
+ 
+  Select Install and hit return
+
+
+mark@tensorbook:~/virtual$ export PATH=/usr/local/cuda-11.2/bin:${PATH}
+mark@tensorbook:~/virtual$ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda-11.2/lib64
+
+
+Get cuDNN: https://developer.nvidia.com/rdp/cudnn-archive
+https://developer.nvidia.com/compute/machine-learning/cudnn/secure/8.1.1.33/11.2_20210301/Ubuntu18_04-x64/libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb
+https://developer.nvidia.com/compute/machine-learning/cudnn/secure/8.1.1.33/11.2_20210301/Ubuntu18_04-x64/libcudnn8-dev_8.1.1.33-1+cuda11.2_amd64.deb
+
+
+mark@tensorbook:~/virtual$ wget https://developer.nvidia.com/compute/machine-learning/cudnn/secure/8.1.1.33/11.2_20210301/Ubuntu18_04-x64/libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb
+mark@tensorbook:~/virtual$ sudo dpkg -i  libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb
+
+mark@tensorbook:~/virtual$ sudo apt install python3.8-venv
+mark@tensorbook:~/virtual$ python3 -m venv tf27
+mark@tensorbook:~/virtual$ . tf27/bin/activate
+
+(tf27) mark@tensorbook:~/virtual$ pip3 install --upgrade pip
+(tf27) mark@tensorbook:~/virtual$ pip3 install 'tensorflow-gpu==2.7.0'
+
+
+(tf27) mark@tensorbook:~/virtual$ python ../data/tensorflow-tests.py
+
+Tensorflow version:  2.7.0 
+Tensorflow file:  /home/mark/virtual/tf27/lib/python3.8/site-packages/tensorflow/__init__.py
+2022-02-05 02:05:14.749313: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:939] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-02-05 02:05:14.754029: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:939] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-02-05 02:05:14.754424: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:939] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+Num GPUs Available:  1
+List GPUs:  [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+

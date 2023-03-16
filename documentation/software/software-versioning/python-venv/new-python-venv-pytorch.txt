@@ -1,0 +1,47 @@
+(venv) user-name@tensorbook:~/python$ deactivate
+user-name@tensorbook:~/python$ python -m torch2.5 venv
+/usr/bin/python: Error while finding module specification for 'torch2.5' (ModuleNotFoundError: No module named 'torch2')
+user-name@tensorbook:~/python$ python -m torch2_5 venv
+/usr/bin/python: No module named torch2_5
+user-name@tensorbook:~/python$ python -m venv torch2_5
+user-name@tensorbook:~/python$ source ./torch2_5/bin/activate
+(torch2_5) user-name@tensorbook:~/python$ pip3 install torch==1.10.1+cu113 torchvision==0.11.2+cu113 torchaudio==0.10.1+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
+Looking in links: https://download.pytorch.org/whl/cu113/torch_stable.html
+Collecting torch==1.10.1+cu113
+  Downloading https://download.pytorch.org/whl/cu113/torch-1.10.1%2Bcu113-cp38-cp38-linux_x86_64.whl (1821.4 MB)
+     |████████████████████████████████| 1821.4 MB 27 kB/s 
+Collecting torchvision==0.11.2+cu113
+  Downloading https://download.pytorch.org/whl/cu113/torchvision-0.11.2%2Bcu113-cp38-cp38-linux_x86_64.whl (24.6 MB)
+     |████████████████████████████████| 24.6 MB 3.3 MB/s 
+Collecting torchaudio==0.10.1+cu113
+  Downloading https://download.pytorch.org/whl/cu113/torchaudio-0.10.1%2Bcu113-cp38-cp38-linux_x86_64.whl (2.9 MB)
+     |████████████████████████████████| 2.9 MB 3.9 MB/s 
+Collecting typing-extensions
+  Using cached typing_extensions-4.0.1-py3-none-any.whl (22 kB)
+Collecting pillow!=8.3.0,>=5.3.0
+  Using cached Pillow-8.4.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.1 MB)
+Collecting numpy
+  Downloading numpy-1.21.5-cp38-cp38-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (15.7 MB)
+     |████████████████████████████████| 15.7 MB 7.7 MB/s 
+Installing collected packages: typing-extensions, torch, pillow, numpy, torchvision, torchaudio
+Successfully installed numpy-1.21.5 pillow-8.4.0 torch-1.10.1+cu113 torchaudio-0.10.1+cu113 torchvision-0.11.2+cu113 typing-extensions-4.0.1
+
+
+(torch2_5) user-name@tensorbook:~/python$ python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Current Device: ", torch.cuda.current_device()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.version) ; print("pytorch file: ", torch.__file__)'
+Is available:  True
+Current Device:  0
+Pytorch CUDA Compiled version:  11030
+Pytorch version:  <module 'torch.version' from '/home/user-name/python/torch2_5/lib/python3.8/site-packages/torch/version.py'>
+pytorch file:  /home/user-name/python/torch2_5/lib/python3.8/site-packages/torch/__init__.py
+
+
+Check for your nvlinks:
+ a. Check for the state of the GPUs:
+     nvidia-smi
+ b. Concise list of GPUs with the relative index, PCI Bus and the Unique UID:
+     nvidia-smi --query-gpu=index,pci.bus_id,uuid --format=csv
+ c. Check for NVLinks/NVSwitch and their connectins:
+     nvidia-smi topo -m
+
+
+

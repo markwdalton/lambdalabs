@@ -1,0 +1,42 @@
+
+1. Get CUDA Toolkit
+   $ wget https://developer.download.nvidia.com/compute/cuda/11.6.1/local_installers/cuda_11.6.1_510.47.03_linux.run
+2. Install CUDA Toolkit in /usr/local
+   $ sudo sh cuda_11.6.1_510.47.03_linux.run
+
+   See: manual-install-CUDA-and-cuDNN.txt
+
+3. Setup Python venv environment:
+   $ python -m venv build_tensorflow
+
+4. Activate environment:
+   $ source build_tensorflow/bin/activate
+
+5. Get Tensorflow source and bazel
+   a. Download Tensorflow:
+      $ git clone https://github.com/tensorflow/tensorflow.git
+   b. Download bazelisk binary copy to path and make links.
+      I downloaded the binary file for bazelisk and copied it
+      into my path and added a link from bazel -> bazelisk
+      $ wget https://github.com/bazelbuild/bazelisk/releases/download/v1.12.0/bazelisk-linux-amd64
+      $ cp bazelisk-linux-amd64 ~/bin
+      $ ln -s ~/bin/bazelisk-linux-amd64 ~/bin/bazelisk
+      $ ln -s ~/bin/bazelisk-linux-amd64 ~/bin/bazel
+
+  6. Setup paths:
+     $ export PATH=/usr/local/cuda/bin:~/bin:$PATH
+     $ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH 
+     $ export CUDA_TOOLKIT_PATH=/usr/local/cuda
+
+  7. Build Tensorflow:
+     $ cd tensorflow
+     $ ./configure 
+        - Defaults except:
+          Do you wish to build TensorFlow with CUDA support? [y/N]: Y
+          CUDA support will be enabled for TensorFlow.
+     $ export TMP=/tmp
+     $ bazel build
+
+  8. Pip install of tensorflow:
+     $ pip install tensorflow
+

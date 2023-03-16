@@ -1,0 +1,20 @@
+
+A Forward tunnel points a port on your local machine to a port on the remote machine (like a web service):
+This is where 8081 on the local host points to port 80 (http) on the remote servers internal port (not on necessarily availble from the internet).
+ $ ssh -L 8081:localhost:80 10.0.10.206 -N -f
+
+ Example test:
+   1. On the remote server/instance:
+      $ python3 -m http.server
+        Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+        127.0.0.1 - - [24/Dec/2022 16:57:58] "GET / HTTP/1.1" 200 -
+        127.0.0.1 - - [24/Dec/2022 16:57:58] code 404, message File not found
+        127.0.0.1 - - [24/Dec/2022 16:57:58] "GET /favicon.ico HTTP/1.1" 404 -
+
+       NOTE: This is on the servers 'localhost'/internal interface on port 8000
+   2. On your "local machine" (it can be another server you need to talk to a remote instance
+      $ ssh -L 8081:localhost:8000 10.0.10.206 -N -f 
+
+Reverse tunnel from point the remote host port to a local machine, 
+where 15000 and 15001 are the port on the remote machine point to your local machines ports 5000,5001
+ $ ssh -R 15000:localhost:5000 -R 15001:localhost:5001 10.0.10.206 -N -f

@@ -1,0 +1,18 @@
+Disable Automatic Updates from command line:
+-------------------------------------------
+
+Open and edit the /etc/apt/apt.conf.d/20auto-upgrades
+using the bellow command:
+
+    $ sudo vi /etc/apt/apt.conf.d/20auto-upgrades
+
+    Change the following from:
+       APT::Periodic::Update-Package-Lists "1";
+       APT::Periodic::Unattended-Upgrade "1";
+
+    To (pull packages lists but not download/install):
+       APT::Periodic::Update-Package-Lists "1";
+       APT::Periodic::Download-Upgradeable-Packages "0";
+       APT::Periodic::AutocleanInterval "0";
+       APT::Periodic::Unattended-Upgrade "0";
+

@@ -1,0 +1,14 @@
+
+For moving a docker image:
+docker pull image:tag
+docker save image:tag -o file.tar
+
+Then on the new machine (airgapped)
+docker load -i file.tar
+
+Save those to a device that you can move to the airgapped location.
+In the airgapped you can use those on the local machine or on a local registry server.
+
+Setting up a local docker registry server:
+     https://docs.docker.com/registry/deploying/
+

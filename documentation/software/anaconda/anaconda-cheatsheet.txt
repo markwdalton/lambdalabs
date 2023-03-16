@@ -1,0 +1,26 @@
+
+1. List Anaconda environments:
+   conda info --envs
+  or
+   conda env list
+2. List Packages in the Conda environment:
+   $ conda activate
+   (base) $ conda list
+   (base) $ pip -v list
+
+3. Create a environment:
+     a. With a YAML file
+        $ conda env create -f ~/conda-yaml/torch_gpu.yml
+   or
+     b. Create from the command line:
+        $ conda create --name torch_gpu pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+
+4. Using the environment: (where 'torch_gpu' is showsn in 'conda env list'
+      conda activate torch_gpu
+
+5. Stop using/deactivate the env:
+      conda deactivate
+
+6. Removing a environment
+      conda env remove -n <name>
+

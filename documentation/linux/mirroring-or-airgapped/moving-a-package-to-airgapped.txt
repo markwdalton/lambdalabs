@@ -1,0 +1,26 @@
+
+1. Setup a site mirror for airgapped site, or proxy for permissions to specific sites.
+
+2. Download specific packages/dependencies to be copied over:
+
+   To just download/copy a package:
+     $ mkdir download
+     $ cd download
+     $ apt download docker.io nvidia-container-toolkit
+     $ ls
+       docker.io_20.10.7-0ubuntu5~20.04.2_amd64.deb
+       nvidia-container-toolkit_1.5.1+dfsg-0lambda0.20.04.1_amd64.deb
+
+
+Then copy those or dependencies over that you need.
+You can see the dependencies with 'apt-cache show <package_name>'
+     $ apt-cache show docker.io
+       Depends: adduser, containerd (>= 1.2.6-0ubuntu1~), iptables,
+       debconf (>= 0.5) | debconf-2.0, libc6 (>= 2.8),
+       libdevmapper1.02.1 (>= 2:1.02.97), libseccomp2 (>= 2.1.0), libsystemd0 (>= 209~)
+     $ apt-cache show nvidia-container-toolkit
+       Depends: libnvidia-container-tools (>= 1.4.0)
+
+Note: That those packages may be installed or also have further dependencies.
+
+

@@ -1,0 +1,31 @@
+
+One way is Disable SMT in the BIOS, it will disable 'Hyperthreads':
+Hyperthread is having 2 threads per core. 
+   * Hyperthreading works great on desktops or applications that have dangling threads (not active compute).
+       - threads context switch to use the core (real hardware)
+   * Disabling Hyperthreading works for most codes, that are one-for-one active computing, where the 
+       - thread can be dedicated to the core.
+       - There can still be too many processes requiring swapping out, then hyperthreading would have been better.
+       - Many C/C++/Fortran-MPI-CUDA do better with SMT Disabled, but not all.
+       - Other tricks in High performance computing is using numactl to lock processes to cores so they do not interfere 
+         for example a daemon.  But also application layout and associated memory.
+
+
+Here is the step-by-step: (This can vary depending on the Chassis type):
+
+  -> Change the BIOS to enable X2APIC - see below for the place in the manual
+  -> Change the BIOS to enable IOMMU - see below for the place in the manual
+  -> Change the kernel to add amd_iommu=on:
+     $ /etc/default/grub: add 'amd_iommu=on' to the line:
+         GRUB_CMDLINE_LINUX_DEFAULT="root=* quiet splash *
+  $ sudo sed -iE '/^GRUB_CMDLINE.*DEFAULT/ s/"$/ amd_iommu=on"/' /etc/default/grub
+  $ sudo update-grub
+  ...
+  $ sudo reboot
+ 
+For the BIOS:
+  Enabling IOMMU (page 92)  amd X2APIC (Local APIC Mode) page 85  in the BIOS:
+     https://download.gigabyte.com/FileList/Manual/server_manual_e_G492-Z5x_v10.pdf
+       From the Manual on "AMD CPS"
+       IOMMU Enable/Disable the IOMMU function. Options available: Enabled/Disabled. Default setting is Disabled.
+

@@ -1,0 +1,98 @@
+
+Getting Docker setup:
+
+1. Install docker and nvidia-container-toolkit
+   $ sudo apt-get install -y docker.io nvidia-container-toolkit
+
+2. Restart docker:
+   $ sudo systemctl daemon-reload
+   $ sudo systemctl restart docker
+
+3. Add your user to 'docker'
+   $ sudo adduser mark docker
+
+4.  logout and log back in  (or a new window session)
+
+5. Confirm your groups:
+   $ groups mark
+   mark : mark adm cdrom sudo dip plugdev lpadmin sambashare docker
+
+
+6. Clean up python while I am doing it on Ubuntu 18.04, apt updates:
+   sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1
+   sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
+
+   a. Make sure 3.8 is default:
+    sudo update-alternatives --config python3
+       - set to 3.8
+
+   b. Reinstalled python3-apt (to get rid of the warnings about apt update)
+         $ sudo apt remove python3-apt
+      then install:
+         $ sudo apt install python3-apt
+
+7.  Pull the latest tensorflow image
+   (Tensorflow images: https://hub.docker.com/r/tensorflow/tensorflow/ )
+   (NVIDIA images: https://ngc.nvidia.com/catalog 
+      - Note this has a great set of docker containers/models/resources
+    https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow/tags
+
+   To get a container with Tensorflow 2.7 with CUDA 11
+      docker pull nvcr.io/nvidia/tensorflow:22.01-tf2-py3
+
+8. Run container with docker:
+   Mount the 'data' directory in your "present working directory" (pwd) on to /data in the image.
+     docker run --gpus all -it --rm -v `pwd`/data:/data/ nvcr.io/nvidia/tensorflow:22.01-tf2-py3 python /data/tensorflow-tests.py
+
+Example (from my tensorbook running Ubuntu 18.04 LTS Desktop + Lambda Stack and docker, python3.8 as above):
+===========================================================================================================
+mark@tensorbook:~$ ls `pwd`/data
+README.notebook  tensorflow-tests.py
+mark@tensorbook:~$ docker run --gpus all -it --rm -v `pwd`/data:/data/ nvcr.io/nvidia/tensorflow:22.01-tf2-py3 python /data/tensorflow-tests.py
+
+================
+== TensorFlow ==
+================
+
+NVIDIA Release 22.01-tf2 (build 31081301)
+TensorFlow Version 2.7.0
+ ...
+
+Tensorflow version:  2.7.0 
+Tensorflow file:  /usr/local/lib/python3.8/dist-packages/tensorflow/__init__.py
+2022-02-05 06:54:56.769002: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1052] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-02-05 06:54:56.801706: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1052] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-02-05 06:54:56.802159: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1052] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+Num GPUs Available:  1
+List GPUs:  [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+
+===========================================================================================================
+
+or
+
+mark@tensorbook:~$ cat `pwd`/data/README.notebook
+This is from the notebook
+mark@tensorbook:~$ sudo docker run --gpus all -it --rm -v `pwd`/data:/data/ nvcr.io/nvidia/tensorflow:22.01-tf2-py3
+
+================
+== TensorFlow ==
+================
+
+NVIDIA Release 22.01-tf2 (build 31081301)
+TensorFlow Version 2.7.0
+
+
+   ...
+root@420e80d6fcc1:/workspace# ls /data/
+README.notebook
+root@420e80d6fcc1:/workspace# cat /data/README.notebook
+This is from the notebook
+
+
+root@420e80d6fcc1:/workspace# TF_CPP_MIN_LOG_LEVEL=3  python -c 'import tensorflow as tf; print("\nTensorflow version: ",tf.__version__, "\nTensorflow file: ",tf.__file__) ;  print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices("GPU")))'
+
+Tensorflow version:  2.7.0 
+Tensorflow file:  /usr/local/lib/python3.8/dist-packages/tensorflow/__init__.py
+Num GPUs Available:  1
+
+

@@ -1,0 +1,20 @@
+
+strace -ttt python ./test.py
+
+or
+
+python -m trace --trace  ./test.py
+
+
+If there is a issue with 'import tensorflow'
+   import sys; print(sys.path)
+   import tensorflow except: print(Exception.with_traceback())
+
+
+Also you can get version information:
+For Anaconda:
+   conda list
+For all installs, shows locally installed pip versions and packages:
+   pip -v list 
+
+

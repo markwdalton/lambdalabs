@@ -1,0 +1,34 @@
+
+NOTE: The nvidia channel and conda-forge channel.
+
+1. Install a environment:
+   $ conda create --name tf_gpu -c nvidia -c conda-forge tensorflow=2.7 cudatoolkit=11.4 cudnn
+
+2. Activate the environment:
+   $ conda activate tf_gpu
+
+3. Run a quick test to show it sees the GPUs:
+   $ TF_CPP_MIN_LOG_LEVEL=3  python -c 'import tensorflow as tf; print("\nTensorflow version: ",tf.__version__, "\nTensorflow file: ",tf.__file__) ;  print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices("GPU")))'
+
+   Tensorflow version:  2.7.0
+   Tensorflow file:  /home/mark/miniconda3/envs/tf_gpu/lib/python3.10/site-packages/tensorflow/__init__.py
+   Num GPUs Available:  2
+
+4. Show which packages were installed for cudatoolkit, tensorflow, cudnn
+   $ conda list | egrep "cudatoolkit|tensorflow|cudnn"
+   cudatoolkit               11.4.1               h8ab8bb3_9    nvidia
+   cudnn                     8.2.1.32             h86fa8c9_0    conda-forge
+   tensorflow                2.7.0           cuda112py310he87a039_0    conda-forge
+   tensorflow-base           2.7.0           cuda112py310h2bd284a_0    conda-forge
+   tensorflow-estimator      2.7.0           cuda112py310h922d117_0    conda-forge
+
+5. Show where the cudnn library is installed:
+   $ find ${CONDA_PREFIX} -name '*libcudnn.so*'
+   /home/mark/miniconda3/envs/tf_gpu/lib/libcudnn.so.8.2.1
+   /home/mark/miniconda3/envs/tf_gpu/lib/libcudnn.so.8
+   /home/mark/miniconda3/envs/tf_gpu/lib/libcudnn.so
+
+6. Setup the library path so applications can find the libraries:
+   ## Anaconda/Miniconda does not correctly setup the path for this library (even though it installs it).
+   export LD_LIBRARY_PATH=${CONDA_PREFIX}/lib:${LD_LIBRARY_PATH}
+

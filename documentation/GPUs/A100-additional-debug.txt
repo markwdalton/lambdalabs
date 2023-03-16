@@ -1,0 +1,31 @@
+
+1. What is the error message or behavior issue
+   a. Slow
+   b. Down
+        * It does not show in 'nvidia-smi' 
+              - rminit
+              - does it show on the PCI Bus
+        * Most common 'Xid 79 - fallen off the bus'
+              - Check dmesg/kern.log for Xid's and GPU remaps or remap failures
+              - reboot
+              - run nvidia-bug-report - check memory errors/remaps
+                   * check the 'nvidia-smi --query' portion
+                     # Some nvidia-bug-reports have control characters so 'grep' does not play well to fix it:
+                         $ cat nvidia-bug-report.log | col -b > nv.log
+                         $ mv nv.log nvidia-bug-report.log
+                     Then for A100's
+                         $ grep -A 5 Remap nvidia-bug-report.log
+
+                       * Remapping Failure Occurred	  : Yes 
+                            - Likely GPU needs replacement or chassis for SXM based GPUs
+                       * Remapping Failure Occurred	  : No
+                            - Check how many errors (it can only have 8 remaps per row).
+                            - watch the counted of Remapped errors but also the Aggregate/Volatile errors
+
+Example errors from the log:
+   Jan 01 09:30:56 gpu1 kernel: [6540565.266214] NVRM: Xid (PCI:0000:51:00): 63, pid=4549, Row Remapper: New row marked for remapping, reset gpu to activate.
+
+   Jan 19 08:22:56 gpu3 kernel: NVRM: Xid (PCI:0000:0b:00): 64, pid=3776851, Row Remapper Error: (0x000000039a559380) - All reserved rows for bank are remapped
+   Jan 19 08:22:56 gpu3 kernel: NVRM: Xid (PCI:0000:0b:00): 94, pid=3776851, Contained: SM (0x1). RST: No, D-RST: No
+
+

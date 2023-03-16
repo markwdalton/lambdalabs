@@ -1,0 +1,43 @@
+Solutions for remote access:
+
+Most things can be done via:
+  1. ssh - most secure and efficient remote access
+  2. jupyterlab/jupyterhub - web based IDE
+  3. Some tools will work over ssh in a client-server mode.
+     * like Visual Studio
+
+Actual Remote Desktops
+3. Remmina  - https://remmina.org/ - Best for Ubuntu to Ubuntu or to windows xRDP, VNC
+   How to install: https://www.helpwire.app/blog/remmina-remote-desktop-client/
+
+  Our instructions:
+   Server side setup:
+```
+   sudo apt -y install xrdp dbus-x11 x11-xserver-utils xfce4{,-goodies}
+   sudo sh -c 'printf "#!/bin/sh\nexec startxfce4\n" > /etc/xrdp/startwm.sh'
+   sudo systemctl enable xrdp
+   sudo systemctl restart xrdp
+``` 
+
+   Desktop client setup:
+```
+   sudo apt install remmina remmina-common remmina-plugin-rdp remmina-plugin-secret remmina-plugin-vnc
+```
+
+4. NoMachine - https://www.nomachine.com/ - portable - may require desktop software installed on server
+   Becareful of 'sleep/hibernate/suspend' modes, and desktop sleep may cause 'network' to sleep
+5. rdesktop  - client - http://www.rdesktop.org/
+```
+   sudo apt install rdesktop
+```
+6. AnyDesk - https://anydesk.com/en
+7. TeamViewer - https://www.teamviewer.com/ 
+   https://www.tecmint.com/how-to-install-teamviewer-on-linux-distributions/
+8. Vinagre - https://wiki.gnome.org/Apps/Vinagre
+9. TightVNC - https://www.tightvnc.com/
+10. RustDesk - https://rustdesk.com/ - Rust Opensource clone of TeamViewer
+11. TigerVNC - https://tigervnc.org/
+12. Chrome Remote Desktop
+13. Apache Guacomole - https://guacamole.apache.org/
+14. FreeNX - https://help.ubuntu.com/community/FreeNX
+15. Xpra - https://xpra.org/

@@ -1,0 +1,84 @@
+Here's how to reinstall the GRUB bootloader, which will allow you to boot into Ubuntu
+
+### 1. Create a bootable USB of Ubuntu(or any flavor of Linux)
+We discuss creating a bootable USB [here](https://deeptalk.lambdalabs.com/t/create-usb-for-installing-ubuntu-18-04/482).
+
+Creating a bootable [Ubuntu USB Drive from linux](https://ubuntu.com/tutorials/create-a-usb-stick-on-ubuntu#1-overview)
+For creating a bootable USB from Windows, see [here](https://ubuntu.com/tutorials/create-a-usb-stick-on-windows#2-requirements).
+
+### 2. Boot into the live image
+Boot into the bootable USB drive.
+One of the first prompts when booting into the bootable USB will ask if
+you want to **Install Ubuntu** or if you want to **Try Ubuntu without
+Installing**. We'll go with **Try Ubuntu without Installing**
+
+### 3. Mount the root partition:
+
+Once we're in the Ubuntu "trial", we'll want to open up a terminal.
+
+`lsblk`(list block) lists all of the disks/drives seen by your machine.
+Open up a terminal and enter `lsblk` to see the existing partitions.
+
+This is a snippet from `lsblk` on my machine:
+
+```
+...
+nvme0n1    259:0    0 931.5G  0 disk
+`-nvme0n1p1 259:1    0  512M  0 part
+`-nvme0n1p2 259:2    0  931G  0 part
+...
+```
+
+Given the size of `nvme0n1p1`, I know it's my *boot* partition, and that
+`nvme0n1p2` is my *root* partition.
+
+I mount the *root* part to the `/mnt` directory with the following:
+
+```
+sudo mount /dev/nvme0n1p2 /mnt
+```
+
+Then I will mount the *boot* part to `/mnt/boot/efi`:
+
+```
+sudo mount /dev/nvme0n1p1 /mnt/boot/efi
+```
+
+### 4. Chroot(change root) into the directory.
+
+In the terminal, run:
+
+```
+wget files.lambdalabs.com/scripts/arch-chroot && \
+chmod +x arch-chroot && \
+sudo cp arch-chroot /bin
+```
+
+This will install `arch-chroot`, which will make it easy for us to
+`chroot` & update the GRUB configuration. Let's chroot into `/mnt`:
+
+```
+sudo arch-chroot /mnt
+```
+
+### 5. Install & Configure GRUB
+
+In the `arch-chroot` shell, we'll run the following to install GRUB:
+
+```
+grub-install /dev/nvme0n1
+```
+
+And then to configure grub:
+
+```
+update-grub
+```
+
+### 6. Syncing & Umounting the disk:
+Finally, run:
+
+```
+exit
+sudo umount -R /mnt && sudo sync && sudo reboot
+```

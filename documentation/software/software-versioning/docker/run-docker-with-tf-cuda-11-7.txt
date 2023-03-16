@@ -1,0 +1,38 @@
+
+1. Look at the example blog:
+   https://lambdalabs.com/blog/nvidia-ngc-tutorial-run-pytorch-docker-container-using-nvidia-container-toolkit-on-ubuntu
+
+  a. Install docker and requirements
+     $ sudo apt-get install -y docker.io nvidia-container-toolkit
+     $ sudo systemctl daemon-reload
+     $ sudo systemctl restart docker
+  b. Add your self to the docker group for future use.
+     $ sudo usermod username -G docker
+       * where "username" is your user name. From 'whoami'
+  c. Find the docker image that matches your requirements
+     https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow
+     From the below page you can see it could be 22.06 through 22.08:
+        https://docs.nvidia.com/deeplearning/frameworks/tensorflow-release-notes/rel_22-06.html  
+        (Just select the version on the left side, and see the container information)
+
+$ docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 -it --rm nvcr.io/nvidia/tensorflow:22.06-tf2-py3 python -c "import tensorflow as tf ; sys_details = tf.sysconfig.get_build_info() ; print(sys_details)"
+
+================
+== TensorFlow ==
+================
+
+NVIDIA Release 22.06-tf2 (build 39734918)
+TensorFlow Version 2.9.1
+
+Container image Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+Copyright 2017-2022 The TensorFlow Authors.  All rights reserved.
+
+Various files include modifications (c) NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+OrderedDict([('cpu_compiler', '/opt/rh/devtoolset-9/root/usr/bin/gcc'), ('cuda_compute_capabilities', ['compute_86', 'sm_52', 'sm_60', 'sm_61', 'sm_70', 'sm_75', 'sm_80', 'sm_86']), ('cuda_version', '11.7'), ('cudnn_version', '8'), ('is_cuda_build', True), ('is_rocm_build', False), ('is_tensorrt_build', True)])
+
+Build with CUDA 11.7, with tensorrt

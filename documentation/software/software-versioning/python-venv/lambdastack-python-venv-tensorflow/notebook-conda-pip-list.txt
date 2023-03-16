@@ -1,0 +1,84 @@
+Package                   Version    Location                                                               Installer
+------------------------- ---------- ---------------------------------------------------------------------- ---------
+absl-py                   1.3.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+aiohttp                   3.8.3      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+aiosignal                 1.2.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+astunparse                1.6.3      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+async-timeout             4.0.2      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+attrs                     22.1.0     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+blinker                   1.4        /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages
+brotlipy                  0.7.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages
+cachetools                4.2.2      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+certifi                   2022.12.7  /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+cffi                      1.15.1     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+charset-normalizer        2.0.4      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+click                     8.0.4      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+contourpy                 1.0.7      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+cryptography              38.0.4     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+cycler                    0.11.0     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+flatbuffers               2.0        /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+flit_core                 3.6.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+fonttools                 4.38.0     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+frozenlist                1.3.3      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+gast                      0.4.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+google-auth               2.6.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+google-auth-oauthlib      0.4.4      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+google-pasta              0.2.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+grpcio                    1.42.0     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+h5py                      3.7.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+idna                      3.4        /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+joblib                    1.2.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+keras                     2.10.0     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+Keras-Preprocessing       1.1.2      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+kiwisolver                1.4.4      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+Markdown                  3.4.1      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+MarkupSafe                2.1.1      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+matplotlib                3.6.3      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+mkl-fft                   1.3.1      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages
+mkl-random                1.2.2      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+mkl-service               2.4.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages
+multidict                 6.0.2      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+numpy                     1.23.5     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+nvidia-cublas-cu11        2022.4.8   /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+nvidia-cublas-cu117       11.10.1.25 /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+nvidia-cuda-runtime-cu11  2022.4.25  /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+nvidia-cuda-runtime-cu117 11.7.60    /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+nvidia-cudnn-cu11         2022.5.19  /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+nvidia-cudnn-cu116        8.4.0.27   /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+nvidia-tensorrt           8.4.3.1    /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+oauthlib                  3.2.1      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+opt-einsum                3.3.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+packaging                 22.0       /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+pandas                    1.5.3      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+Pillow                    9.4.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+pip                       22.3.1     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages
+protobuf                  3.20.1     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages
+pyasn1                    0.4.8      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+pyasn1-modules            0.2.8      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages
+pycparser                 2.21       /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+PyJWT                     2.4.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+pyOpenSSL                 22.0.0     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+pyparsing                 3.0.9      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+PySocks                   1.7.1      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+python-dateutil           2.8.2      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+pytz                      2022.7.1   /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+requests                  2.28.1     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+requests-oauthlib         1.3.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+rsa                       4.7.2      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+scikit-learn              1.2.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+scipy                     1.9.3      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages
+setuptools                65.6.3     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages
+six                       1.16.0     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+tensorboard               2.10.0     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+tensorboard-data-server   0.6.1      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+tensorboard-plugin-wit    1.8.1      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+tensorflow                2.10.0     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+tensorflow-estimator      2.10.0     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+termcolor                 2.1.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+threadpoolctl             3.1.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages pip
+typing_extensions         4.4.0      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+urllib3                   1.26.14    /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+Werkzeug                  2.2.2      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+wheel                     0.37.1     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages
+wrapt                     1.14.1     /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda
+yarl                      1.8.1      /home/mark/miniconda3/envs/tensorrt_quick/lib/python3.10/site-packages conda

@@ -1,0 +1,26 @@
+
+This would be to make a copy of the repository (a mirror):
+
+For setting up a mirrored repository:
+I was able to setup a mirrored repository from the Lambda stack:
+
+$ sudo cp /etc/apt/mirror.list /etc/apt/mirror.list-bak
+$ sudo vi /etc/apt/mirror.list
+
+$ diff /etc/apt/mirror.list /etc/apt/mirror.list-bak
+12d11
+< set base_path /var/www/html/ubuntu
+17d15
+< deb http://archive.lambdalabs.com/ubuntu focal main
+… commented out all other repositories(Ubuntu)…
+
+$ sudo mkdir -p /var/www/html/ubuntu/var
+$ sudo cp /var/spool/apt-mirror/var/postmirror.sh /var/www/html/ubuntu/var
+$ sudo apt-mirror
+$ find /var/www/html -name ‘*.deb’ | wc -l
+311
+
+$ du -sh /var/www/html/ubuntu
+5.6G /var/www/html/ubuntu
+
+

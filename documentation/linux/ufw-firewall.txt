@@ -1,0 +1,35 @@
+
+$ sudo ufw status
+Status: inactive
+
+
+$ sudo systemctl status ufw
+
+$ sudo ufw status
+Status: active
+
+
+# Allowing SSH access (or port 22)
+$ sudo ufw allow ssh
+
+# Perhaps you wish to allow web:
+#  80 - is non-ssl web
+#  8080 - is a alternative unpriviledged web port
+#  443 - is the normal secured ssl (https) web port
+$ sudo ufw allow 80, 8080, 443
+
+# Example Status after allowing the above ports:
+$ sudo ufw status
+Status: active
+
+To                         Action      From
+--                         ------      ----
+22/tcp                     ALLOW       Anywhere
+80                         ALLOW       Anywhere
+443                        ALLOW       Anywhere
+8080                       ALLOW       Anywhere
+22/tcp (v6)                ALLOW       Anywhere (v6)
+80 (v6)                    ALLOW       Anywhere (v6)
+443 (v6)                   ALLOW       Anywhere (v6)
+8080 (v6)                  ALLOW       Anywhere (v6)
+
