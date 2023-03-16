@@ -1,0 +1,34 @@
+
+For the "Unknown #0xff | | Asserted" in your ipmitool sel elist
+
+To fix this:
+   1. Run the following command to verify that there is a both a
+      upper and lower case 'ADMIN' and 'admin', respectively.
+
+      # ipmitool user list 1
+        ID  Name         Callin  Link Auth    IPMI Msg   Channel Priv Limit
+        2   ADMIN         false      false        true       ADMINISTRATOR
+
+   2. If there is only one user listed, add a new user for whichever is missing:
+      using one of the command sets below:
+      # ipmitool user set name 2 ADMIN
+      # ipmitool user set password 2 (EnterADMINtwice)
+      # ipmitool channel setaccess 1 2 link=off ipmi=on callin=off privilege=4
+      # ipmitool user enable 2
+
+     Or most likely:
+      # ipmitool user set name 3 admin
+      # ipmitool user set password 3 (Enter admin twice)
+      # ipmitool channel setaccess 1 3 link=off ipmi=on callin=off privilege=4
+      # ipmitool user enable 3
+
+   3. Afterwards, run the ipmitool user list command and verify that the list
+      displays both users:
+      # ipmitool user list 1
+      ID  Name         Callin  Link Auth    IPMI Msg   Channel Priv Limit
+      2   ADMIN            true    false      false      Unknown (0x00)
+      3   admin            true    false      false      Unknown (0x00)
+
+   4. Check 'ipmitool sel elist' to ensure the errors have stopped.
+      And you may wish to also clear the previous errors.
+      # ipmitool sel clear

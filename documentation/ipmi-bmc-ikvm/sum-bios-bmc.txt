@@ -1,0 +1,10 @@
+
+sudo ./sum_2.10.0_Linux_x86_64/sum -c GetBmcInfo
+
+sudo ./fw/sum_2.10.0_Linux_x86_64/script/Linux_enable_RHI.sh 
+sudo ./fw/sum_2.10.0_Linux_x86_64/sum -I Redfish_HI -u ADMIN -p ALRBICHSGG
+sudo ./fw/sum_2.10.0_Linux_x86_64/sum -I Redfish_HI -u ADMIN -p ALRBICHSGG -c UpdateBmc --file ./fw/BMC_H12AST2600-ROT-2201MS_20220426_
+01.01.07_STDsp/BMC_H12AST2600-ROT-2201MS_20220426_01.01.07_STDsp.bin
+sudo .fw//sum_2.10.0_Linux_x86_64/sum -c GetCurrentBiosCfg &> bios
+sudo ./fw/sum_2.10.0_Linux_x86_64/sum -c ChangeBiosCfg --file ./fw/bios_settings
+
