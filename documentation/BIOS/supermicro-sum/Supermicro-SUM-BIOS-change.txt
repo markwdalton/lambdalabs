@@ -12,7 +12,7 @@ Changing the BIOS:
 ./sum -i $BMC_IP -u ADMIN -p PASSWORD -c ChangeBiosCfg --file BiosCfg.xml
 
 Where BiosCfg.xml:
-
+* This 'ACS Enable' is likely a no-op since AER is not enabled.
 # This is on the Supermicro 4124GO-NART+
 ======================================================================
 $ cat BmcCfg.xml
@@ -43,6 +43,7 @@ $ cat BmcCfg.xml
 #   <Menu name="Advanced Power Management Configuration">
 #         * Numerous power control options needs proper testing (not 'guessing'/bluffing)
 #           Benchmark/testing numbers.  Not "it should according to some doc/spec sheet (current method)."
+The ACS Control 
 ================================================================================
 <?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
 <BiosCfg>
@@ -51,7 +52,7 @@ $ cat BmcCfg.xml
       <Menu name="North Bridge">
         <Menu name="IIO Configuration">
           <Menu name="Intel� VT for Directed I/O (VT-d)" order="1">
-	    <Setting name="ACS Control" selectedOption="Enable" type="Option" />
+	    <Setting name="ACS Control" selectedOption="Disable" type="Option" />
           </Menu>
         </Menu>
       </Menu>

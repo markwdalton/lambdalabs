@@ -1,0 +1,76 @@
+
+I would set:
+  * ACSEnable -> Disabled - normal for NCCL codes
+  * Determinism Control -> Manual
+  * Determinism Slider  -> Performance
+  * SR-IOVSupport for PCI pass-thru 
+  * IOMMU -> Disabled
+    -> Enable for - PCI pass-thru 
+    Pros: For Memory isolation and protection - virtual machines
+          Allows for larger memory allocation over fragmented memory. (32-bit DMA capable devices)
+          Interrupt isolation
+    Cons: Latency for dynamic DMA mapping
+          In-memory data structures in software
+          Can result in lower performance due to the extra memory accesses required to do DMA actions. 
+
+** NOTE: This still needs 'benchmark testing', and performance may very between codes.
+
+Defaults: There are around 213 AttributeNames and without BootOption 171 AttributeNames.
+Example collection and search:
+```
+  $ curl -s -k -H'Content-type: application/json' -X GET https://${BMC_IP}/registries/BiosAttributeRegistry.1.0.0.json | jq > 4124GS-TNR-bios.json
+  $ egrep "CurrentValue|AttributeName|MenuPath" 4124GS-TNR-bios.json  | egrep -B 2 "PCIAERSupport|NUMANodesPerSocket|SMTControl|CorePerformanceBoost|GlobalC-stateControl|DeterminismControl|DeterminismSlider|IOMMU|ACSEnable|PackagePowerLimitControl|PackagePowerLimit|Above4GDecoding|SR-IOVSupport"
+```
+
+        "CurrentValue": "Disabled",
+        "MenuPath": "./Advanced/ACPISettings",
+        "AttributeName": "PCIAERSupport",
+--
+        "CurrentValue": "Auto",
+        "MenuPath": "./Advanced/ACPISettings",
+        "AttributeName": "NUMANodesPerSocket",
+--
+        "CurrentValue": "Auto",
+        "MenuPath": "./Advanced/CPUConfiguration",
+        "AttributeName": "SMTControl",
+--
+        "CurrentValue": "Auto",
+        "MenuPath": "./Advanced/CPUConfiguration",
+        "AttributeName": "CorePerformanceBoost",
+--
+        "CurrentValue": "Auto",
+        "MenuPath": "./Advanced/CPUConfiguration",
+        "AttributeName": "GlobalC-stateControl",
+--
+        "CurrentValue": "Auto",
+        "MenuPath": "./Advanced/NBConfiguration",
+        "AttributeName": "DeterminismControl",
+--
+        "CurrentValue": "Auto",
+        "MenuPath": "./Advanced/NBConfiguration",
+        "AttributeName": "DeterminismSlider",
+--
+        "CurrentValue": "Auto",
+        "MenuPath": "./Advanced/NBConfiguration",
+        "AttributeName": "IOMMU",
+--
+        "CurrentValue": "Auto",
+        "MenuPath": "./Advanced/NBConfiguration",
+        "AttributeName": "ACSEnable",
+--
+        "CurrentValue": "Auto",
+        "MenuPath": "./Advanced/NBConfiguration",
+        "AttributeName": "PackagePowerLimitControl",
+--
+        "CurrentValue": 0,
+        "MenuPath": "./Advanced/NBConfiguration",
+        "AttributeName": "PackagePowerLimit",
+--
+        "CurrentValue": "Enabled",
+        "MenuPath": "./Advanced/PCIe|PCI|PnPConfiguration",
+        "AttributeName": "Above4GDecoding",
+--
+        "CurrentValue": "Enabled",
+        "MenuPath": "./Advanced/PCIe|PCI|PnPConfiguration",
+        "AttributeName": "SR-IOVSupport",
+

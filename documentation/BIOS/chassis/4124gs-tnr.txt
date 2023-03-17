@@ -1,0 +1,17 @@
+
+ACS Enable does not appear to change unless PCIAERSupport is enabled, so it is a no-op most times.
+
+src/sum_2.10.0_Linux_x86_64/sum -i 10.0.10.207 -u ADMIN -p KOGEFVUSII -c ChangeBiosCfg --file BiosCfg.xml
+
+$ cat BiosCfg.xml 
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<BiosCfg>
+  <Menu name="Advanced">
+    <Menu name="NB Configuration">
+      <Setting name="Determinism Control" selectedOption="Manual" type="Option" />
+      <Setting name="Determinism Slider" selectedOption="Performance" type="Option" />
+      <Setting name="IOMMU" selectedOption="Disabled" type="Option" />
+      <Setting name="ACS Enable" selectedOption="Disabled" type="Option" />
+    </Menu>
+  </Menu>
+</BiosCfg>
