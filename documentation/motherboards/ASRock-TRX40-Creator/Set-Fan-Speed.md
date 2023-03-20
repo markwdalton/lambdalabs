@@ -25,3 +25,5 @@ Then change the temperatures:
 
    Critical Temperature:                             100
 
+* ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASRock-TRX40-Creator/TRX40-Creator-Fan-speed.png "TRX40 Creator BIOS Fan Profile")
+
