@@ -25,7 +25,7 @@
       * Just to have the serial number when you boot, so you can choose where to install from Ubuntu
 
 2. Using the Java Console:
-<p>   ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/servers/supermicro/Supermicro-Java-remote-mount-iso.png "Using the Java Console to mount iso image")</p>
+![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/servers/supermicro/Supermicro-Java-remote-mount-iso.png "Using the Java Console to mount iso image")</p>
 
 <p>   a. Login into the BMC/IPMI Web GUI with your IPMI login/password
 <p>   b. Select 'Remote Control'
@@ -45,7 +45,7 @@
 <p>      Now you are ready to boot
 <p>
 3. Booting the system with boot menu
-<p>   ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/servers/supermicro/Supermicro-boot-choices-Virtual-USB.png "F11 Boot menu selection")</p>
+  ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/servers/supermicro/Supermicro-boot-choices-Virtual-USB.png "F11 Boot menu selection")</p>
 <p>   In the early stages of the boot while it is at the 'F2/Delete to BIOS' or 'F11 for boot menu'
 <p>   * Hit - 'F11' - for boot mentu
 <p>   * On the boot menu:
