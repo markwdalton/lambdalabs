@@ -44,8 +44,9 @@
 <p>        * Click 'OK' button
 <p>      Now you are ready to boot
 <p>
-3. Booting the system with boot menu
-  ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/servers/supermicro/Supermicro-boot-choices-Virtual-USB.png "F11 Boot menu selection")</p>
+3. Booting the system with boot menu</p>
+
+![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/servers/supermicro/Supermicro-boot-choices-Virtual-USB.png "F11 Boot menu selection")</p>
 <p>   In the early stages of the boot while it is at the 'F2/Delete to BIOS' or 'F11 for boot menu'
 <p>   * Hit - 'F11' - for boot mentu
 <p>   * On the boot menu:
