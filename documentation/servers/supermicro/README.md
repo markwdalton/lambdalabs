@@ -25,31 +25,31 @@
       * Just to have the serial number when you boot, so you can choose where to install from Ubuntu
 
 2. Using the Java Console:
-   ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/servers/supermicro/Supermicro-Java-remote-mount-iso.png "Using the Java Console to mount iso image")
+<p>   ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/servers/supermicro/Supermicro-Java-remote-mount-iso.png "Using the Java Console to mount iso image")</p>
 
-   a. Login into the BMC/IPMI Web GUI with your IPMI login/password
-   b. Select 'Remote Control'
-   c. Select 'JAVA plug-in' - and save when it prompts you
-   d. Click on 'Launch Console' - this will download a 'launch.jlnp' file.
-   e. Download a Java SDK plugin, I used IcedTea (https://openjdk.org/install/)
-      For Ubuntu:  sudo apt install icedtea-netx
-          https://icedtea.classpath.org/download/
-          https://openjdk.org/projects/icedtea/
-   f. Use your 'Files' folder to open the file 'launch.jlnp' (right click) and select opening it with IcedTea
-   g. Select 'Virtual Media' -> 'Virtual Storage'
-        * 'Logical Drive Type' -> 'ISO File'
-        * 'Open' -> Find the ISO file image for the install, in this case 'Ubuntu 22.04 LTS Server'
-           Select File, then 'Open' button.
-        * Click 'Plug in' button
-        * Click 'OK' button
-      Now you are ready to boot
+<p>   a. Login into the BMC/IPMI Web GUI with your IPMI login/password
+<p>   b. Select 'Remote Control'
+<p>   c. Select 'JAVA plug-in' - and save when it prompts you
+<p>   d. Click on 'Launch Console' - this will download a 'launch.jlnp' file.
+<p>   e. Download a Java SDK plugin, I used IcedTea (https://openjdk.org/install/)
+<p>      For Ubuntu:  sudo apt install icedtea-netx
+<p>          https://icedtea.classpath.org/download/
+<p>          https://openjdk.org/projects/icedtea/
+<p>   f. Use your 'Files' folder to open the file 'launch.jlnp' (right click) and select opening it with IcedTea
+<p>   g. Select 'Virtual Media' -> 'Virtual Storage'
+<p>        * 'Logical Drive Type' -> 'ISO File'
+<p>        * 'Open' -> Find the ISO file image for the install, in this case 'Ubuntu 22.04 LTS Server'
+<p>           Select File, then 'Open' button.
+<p>        * Click 'Plug in' button
+<p>        * Click 'OK' button
+<p>      Now you are ready to boot
+<p>
 3. Booting the system with boot menu
-   ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/servers/supermicro/Supermicro-boot-choices-Virtual-USB.png "F11 Boot menu selection")
-   In the early stages of the boot while it is at the 'F2/Delete to BIOS' or 'F11 for boot menu'
-   * Hit - 'F11' - for boot mentu
-   * On the boot menu:
-     Select: - FI: ATEN Select Virtual CDROM - on device
-        * Hit return
-   * on blank screen you may need to hit return
+<p>   ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/servers/supermicro/Supermicro-boot-choices-Virtual-USB.png "F11 Boot menu selection")</p>
+<p>   In the early stages of the boot while it is at the 'F2/Delete to BIOS' or 'F11 for boot menu'
+<p>   * Hit - 'F11' - for boot mentu
+<p>   * On the boot menu:
+<p>     Select: - FI: ATEN Select Virtual CDROM - on device
+<p>        * Hit return
+<p>   * on blank screen you may need to hit return
   
-
