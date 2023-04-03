@@ -1,27 +1,40 @@
 
 Example how to run:
-
-make MPI=1 MPI_HOME=/usr/mpi/gcc/openmpi-4.1.4rc1/ CUDA_HOME=/usr
-
+------------------
 nccl-tests: (from: https://github.com/NVIDIA/nccl-tests.git)
-   Build: May vary with your install. (But these should add the mpirun to your path and normal mpi.h path)
+
+   Add openmpi dev/bin:
+   -------------------
       $ sudo apt install openmpi libopenmpi-dev openmpi-bin
+
+   Get source:
+   ----------
+      $ git clone https://github.com/NVIDIA/nccl-tests.git
+      $ cd nccl-tests
+
+   Build:
+   -----
       $ make MPI=1 CUDA_HOME=/usr MPI_HOME=/usr/lib/x86_64-linux-gnu/openmpi
+
      Or if it is installed else where:
          $ find /usr -name 'mpi.h'
            And add that MPI_HOME
 
     Run on one node, with 2 process per node, and 1 GPU per process:
+    ---------------------------------------------------------------
         $ mpirun -np  2 --host localhost:1 -x MPI_IB_STRINGS=nonroce -mca btl tcp,self -mca mtl ^ofi -x NCCL_DEBUG=INFO build/all_gather_perf -b 8 -e 4G -f 2 -g 1 
 
     Run on two nodes with 8 MPI threads on each node with 1 GPU per MPI thread:
+    --------------------------------------------------------------------------
         $ mpirun -np 16 --host node1:8,node2:8 -x MPI_IB_STRINGS=nonroce -mca btl tcp,self -mca mtl ^ofi -x NCCL_DEBUG=INFO ./nccl-tests/build/all_gather_perf -b 8 -e 4G -f 2 -g 1
 
     Run on two nodes with 1 MPI thread on each node with 8 GPUs per MPI thread:
+    --------------------------------------------------------------------------
         $ mpirun -np  2 --host node1:1,node2:1 -x MPI_IB_STRINGS=nonroce -mca btl tcp,self -mca mtl ^ofi -x NCCL_DEBUG=INFO ./nccl-tests/build/all_gather_perf -b 8 -e 4G -f 2 -g 8
 
-Example running on the localhost:
 
+Example running on the localhost:
+--------------------------------
 $ mpirun -np  2 --host localhost:2 -x MPI_IB_STRINGS=nonroce -mca btl tcp,self -mca mtl ^ofi -x NCCL_DEBUG=INFO build/all_gather_perf -b 8 -e 4G -f 2 -g 1
  ....
 hyperplane:3897818:3897877 [0] NCCL INFO comm 0x564c3f8973d0 rank 0 nranks 2 cudaDev 0 busId 5000 commId 0x63a030f6d26908b8 - Init COMPLETE
