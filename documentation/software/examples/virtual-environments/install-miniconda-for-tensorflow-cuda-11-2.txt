@@ -1,0 +1,50 @@
+
+Check your:
+   pip -v list | grep -v "/usr/lib/python3/dist-packages"
+    * This will show you any package installed that is not part of Lambda Stack or Ubuntu
+      (Ideally these other packages should only be in a virtual environment Python venv or Anaconda/Miniconda)
+    * The Common fix is to:
+       Move the ~/.local out of the way.  This is where 'pip' installs if you are not in a virtual env
+          $ mv ~/.local ~/.local.bak
+       Move the /usr/local, this is where local site software is suppose to be installed, but NVIDIA sometimes
+       installs their software there, and pip installs packages there if you run 'sudo pip install' 
+          $ sudo mv /usr/local /usr/local.bak
+       Or you can remove each package from: 'pip -v list | grep "/usr/local"'
+          $ sudo pip uninstall package_name
+
+1. Install Miniconda:
+   From: https://docs.conda.io/en/latest/miniconda.html#linux-installers
+   Current version for Python 3.10:
+    $ wget https://repo.anaconda.com/miniconda/Miniconda3-py310_22.11.1-1-Linux-x86_64.sh
+    $ bash Miniconda3-py310_22.11.1-1-Linux-x86_64.sh
+ 
+2. Activate the environment for miniconda to be active:
+   $ . $HOME/.bashrc
+
+   If you want Miniconda installed but not always active, I would not mix Miniconda with python venv,
+   since Miniconda blocks the default install.
+
+   I do the following so conda is not always activated, and I can switch between Miniconda and Python venv:
+    (base) $ conda deactivate
+    $ conda config --set auto_activate_base false
+
+3. Create a environment:
+     a. Create from the command line:
+        $ conda create --name tf_cuda_11-7 cudatoolkit~=11.7 protobuf -c nvidia
+     b. Activate the Miniconda environment:
+        $ conda activate tf_cuda_11-7
+     c. Install other dependencies:
+        $tensorrt_quick) $ pip install tensorflow
+
+4. Run the code:
+   (tf_cuda_11-7) $ TF_CPP_MIN_LOG_LEVEL=3 python check-version.py
+
+
+$ cat check-version.py
+
+import tensorflow as tf
+
+sys_details = tf.sysconfig.get_build_info()
+# cuda_version = sys_details["cuda_version"]
+print(sys_details)
+
