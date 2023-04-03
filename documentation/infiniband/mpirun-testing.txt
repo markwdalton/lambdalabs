@@ -1,0 +1,68 @@
+
+Example how to run:
+
+make MPI=1 MPI_HOME=/usr/mpi/gcc/openmpi-4.1.4rc1/ CUDA_HOME=/usr
+
+nccl-tests: (from: https://github.com/NVIDIA/nccl-tests.git)
+   Build: May vary with your install. (But these should add the mpirun to your path and normal mpi.h path)
+      $ sudo apt install openmpi libopenmpi-dev openmpi-bin
+      $ make MPI=1 CUDA_HOME=/usr MPI_HOME=/usr/lib/x86_64-linux-gnu/openmpi
+     Or if it is installed else where:
+         $ find /usr -name 'mpi.h'
+           And add that MPI_HOME
+
+    Run on one node, with 2 process per node, and 1 GPU per process:
+        $ mpirun -np  2 --host localhost:1 -x MPI_IB_STRINGS=nonroce -mca btl tcp,self -mca mtl ^ofi -x NCCL_DEBUG=INFO build/all_gather_perf -b 8 -e 4G -f 2 -g 1 
+
+    Run on two nodes with 8 MPI threads on each node with 1 GPU per MPI thread:
+        $ mpirun -np 16 --host node1:8,node2:8 -x MPI_IB_STRINGS=nonroce -mca btl tcp,self -mca mtl ^ofi -x NCCL_DEBUG=INFO ./nccl-tests/build/all_gather_perf -b 8 -e 4G -f 2 -g 1
+
+    Run on two nodes with 1 MPI thread on each node with 8 GPUs per MPI thread:
+        $ mpirun -np  2 --host node1:1,node2:1 -x MPI_IB_STRINGS=nonroce -mca btl tcp,self -mca mtl ^ofi -x NCCL_DEBUG=INFO ./nccl-tests/build/all_gather_perf -b 8 -e 4G -f 2 -g 8
+
+Example running on the localhost:
+
+$ mpirun -np  2 --host localhost:2 -x MPI_IB_STRINGS=nonroce -mca btl tcp,self -mca mtl ^ofi -x NCCL_DEBUG=INFO build/all_gather_perf -b 8 -e 4G -f 2 -g 1
+ ....
+hyperplane:3897818:3897877 [0] NCCL INFO comm 0x564c3f8973d0 rank 0 nranks 2 cudaDev 0 busId 5000 commId 0x63a030f6d26908b8 - Init COMPLETE
+#
+#                                                              out-of-place                       in-place          
+#       size         count      type   redop    root     time   algbw   busbw #wrong     time   algbw   busbw #wrong
+#        (B)    (elements)                               (us)  (GB/s)  (GB/s)            (us)  (GB/s)  (GB/s)       
+hyperplane:3897819:3897902 [1] NCCL INFO comm 0x55627c955400 rank 1 nranks 2 cudaDev 1 busId 6000 commId 0x63a030f6d26908b8 - Init COMPLETE
+           0             0     float    none      -1    16.83    0.00    0.00      0     6.81    0.00    0.00      0
+           0             0     float    none      -1     6.88    0.00    0.00      0    19.45    0.00    0.00      0
+          32             4     float    none      -1    134.7    0.00    0.00      0    232.1    0.00    0.00      0
+          64             8     float    none      -1    216.4    0.00    0.00      0    146.5    0.00    0.00      0
+         128            16     float    none      -1    10.57    0.01    0.01      0    10.35    0.01    0.01      0
+         256            32     float    none      -1    10.60    0.02    0.01      0    10.35    0.02    0.01      0
+         512            64     float    none      -1    10.77    0.05    0.02      0    10.41    0.05    0.02      0
+        1024           128     float    none      -1    10.50    0.10    0.05      0    10.32    0.10    0.05      0
+        2048           256     float    none      -1   2331.4    0.00    0.00      0    131.8    0.02    0.01      0
+        4096           512     float    none      -1    22.74    0.18    0.09      0    29.46    0.14    0.07      0
+        8192          1024     float    none      -1    173.6    0.05    0.02      0    137.7    0.06    0.03      0
+       16384          2048     float    none      -1    132.2    0.12    0.06      0    14.20    1.15    0.58      0
+       32768          4096     float    none      -1    15.16    2.16    1.08      0    14.16    2.31    1.16      0
+       65536          8192     float    none      -1    15.35    4.27    2.14      0    14.42    4.54    2.27      0
+      131072         16384     float    none      -1    15.61    8.40    4.20      0    14.70    8.91    4.46      0
+      262144         32768     float    none      -1    17.75   14.77    7.38      0    133.3    1.97    0.98      0
+      524288         65536     float    none      -1    113.8    4.61    2.30      0    28.08   18.67    9.34      0
+     1048576        131072     float    none      -1    215.6    4.86    2.43      0    179.2    5.85    2.93      0
+     2097152        262144     float    none      -1    157.2   13.34    6.67      0    41.47   50.57   25.29      0
+     4194304        524288     float    none      -1    46.94   89.35   44.67      0    45.04   93.12   46.56      0
+     8388608       1048576     float    none      -1    87.67   95.69   47.84      0    185.8   45.15   22.57      0
+    16777216       2097152     float    none      -1    87.51  191.71   95.86      0    200.0   83.89   41.95      0
+    33554432       4194304     float    none      -1    401.7   83.53   41.76      0    137.2  244.60  122.30      0
+    67108864       8388608     float    none      -1    609.3  110.13   55.07      0    280.9  238.88  119.44      0
+   134217728      16777216     float    none      -1   2623.5   51.16   25.58      0    708.3  189.50   94.75      0
+   268435456      33554432     float    none      -1   1541.0  174.19   87.10      0   1524.4  176.09   88.05      0
+   536870912      67108864     float    none      -1   5894.9   91.07   45.54      0   3151.2  170.37   85.19      0
+  1073741824     134217728     float    none      -1   9297.3  115.49   57.74      0   8997.7  119.33   59.67      0
+  2147483648     268435456     float    none      -1    20815  103.17   51.59      0    14258  150.62   75.31      0
+  4294967296     536870912     float    none      -1    45930   93.51   46.76      0    32887  130.60   65.30      0
+hyperplane:3897818:3897818 [0] NCCL INFO comm 0x564c3f8973d0 rank 0 nranks 2 cudaDev 0 busId 5000 - Destroy COMPLETE
+# Out of bounds values : 0 OK
+# Avg bus bandwidth    : 24.9041 
+#
+hyperplane:3897819:3897819 [1] NCCL INFO comm 0x55627c955400 rank 1 nranks 2 cudaDev 1 busId 6000 - Destroy COMPLETE
+
