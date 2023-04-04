@@ -32,6 +32,18 @@ Print Sensor information:
      $ sudo ipmitool sensor
 Print Information about the system:
      $ sudo ipmitool fru
+Power Status:
+     $ sudo ipmitool power status
+Power control server:
+     $ sudo ipmitool power [status|on|off|cycle|reset|diag|soft]
+Power on server:
+     $ sudo ipmitool power on
+Power off server:
+     $ sudo ipmitool power off
+Power cycle server:
+     $ sudo ipmitool power cycle
+Power reset the server:
+     $ sudo ipmitool power reset
 
 IPMI Example setting up a static IP address:
   If you were given:
