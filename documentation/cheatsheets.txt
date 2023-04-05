@@ -1,0 +1,455 @@
+﻿Lambda Cheat Sheets
+This is the conceptual starter - provides the idea
+
+
+Lambda Ubuntu Linux Command Line Cheat Sheet (http://lambdalabs.com/)
+Working with Files:
+  Basics:
+    * pwd – Show the ‘present working directory’
+    * ls     - see files in your current directory
+    * cd <name> - to change to a new directory
+    * find . -name ‘example*’   - Find files that start with the name ‘example’
+  ls - List files 
+    * ls -alrt - List all files in directory long format 
+    * ls -a  - list hidden files
+    * ls -CF - List in columns and classify files
+    * ls -lR - Long format recursive
+  Show sizes of files:
+    * du -s <filename> - in KBs
+    * du -sh <filename> - human readable
+    * du -s * | sort -n  - Easy way to find the largest files/directories in a directory
+  Moving Files:
+    * mv <filename> <new filename>
+    * mv <name> <location/name>
+  Move a file to new location/name:
+    * mv foo /tmp/user/foo.txt
+         Move a directory to new name:
+    * mv data save/data.bak
+  Copying files:
+    * cp <file> <new_file>
+    * cp <file> <dir>/<new_file>
+      Copy a directory to new name/location:
+    * cp -a <dir> <new_dir>
+  Remote copy:
+    * sftp
+    * rsync
+    * scp file remote:./file
+    * scp -rq directory remote:.
+    * sshfs user@remote-host:directory ./mount
+      Example:
+        $ mkdir myhome
+        $ sshfs 192.168.1.122:/home ./myhome
+        $ df -h ./myhome
+          Filesystem           Size  Used Avail Use% Mounted on
+          192.168.1.122:/home  480G   73G  384G  16% /home/user/myhome
+        $ umount ./myhome
+    * Tunnel a port to a remote hosts local interface to your machine:
+        - Use case to securely access over ssh jupyter-notebook on a remote hosts that is not exposed to the internet.
+        $ ssh -N -L 8888:localhost:8888 <gpuserver>
+          * Substitute the 8888 port as jupyter notebook may assign others
+         
+    * Tunnel a port for a remote host to access from your local machine through a jump host:
+        $ ssh mdalton@50.211.197.34 -L 8080:10.1.10.69:80
+       
+Checking space on a file system:
+  Disk space: (-h is ‘human readable’ or translated to M, G based on 1024 or 1000 for inodes).
+   * df -h .  - Check your current location
+   * df -h  - Check all filesystems mounted.   You should be concerned over 90%.
+        Check Inodes (number of files):
+   * df -i  - Number of inodes, used, available. Be concerned over 90%.
+
+Show CPU Utilization:
+   * top
+   * htop
+   * ps
+     ps -elf
+     ps aux
+     ps -flu <user>
+
+* Show Memory Utilization on Linux:
+   * free
+   * free -h
+   * top
+
+Disk commands:
+   * lsblk - list drives seen
+   * df - show sizes of mounted
+   * mount - show mounts/options
+   * fdisk -l - show drive partitions
+   * smartctl - check drives for information or errors.
+     Example:
+      smartctl -x /dev/nvme0n0
+
+Show GPU Utilization:
+      * nvtop
+      * nvidia-smi 
+      * nvidia-smi -q - this provides additional information.
+      * nvidia-smi pmon
+
+NVlink information:
+      * nvidia-smi topo -m  - To see the NVLink connection topology
+      * nvidia-smi nvlink -s - To see rates per link
+
+GPU Debugging:
+      * ‘nvidia-smi Failed to initialize NVML: Driver/library version mismatch’
+      * This can normally be resolved with a reboot.
+      * This occurs when the command is newer than the nvidia kernel module.
+      * I do not see any GPUs:
+      * If it is using  an old CUDA version that does not support current GPUs.  Like CUDA 10 (nvidia-cuda-toolkit) with Ampere GPUs (30## series or A## series GPUs).
+      * If you are using Anaconda:
+       - If it did not load or  have the correct CUDA installed.
+       - If you did not set the LD_LIBRARY_PATH to the cuDNN version Anaconda installed. 
+         * See logged errors:
+         * grep "kernel: NVRM: Xid" /var/log/kern.log
+         * The main Xid errors:
+            All GPUs Xid: 79
+            A100 Xid: 64, 94
+
+Xid Error References:
+      * GPU Debug guide: https://docs.nvidia.com/deploy/gpu-debug-guidelines/index.html
+      * GPU Error Definitions: https://docs.nvidia.com/deploy/xid-errors/index.html
+      * A100 Xids: https://docs.nvidia.com/deploy/a100-gpu-mem-error-mgmt/index.html
+
+    NVidia Fabric manager/NVSwitch:
+      * Fabric manager guide - https://docs.nvidia.com/datacenter/tesla/pdf/fabric-manager-user-guide.pdf
+
+PCI devices:
+      * lspci - lists devices on the PCI bus 
+      * lspci -vvv - provides more verbose output
+
+USB:
+      * lsusb - list seen USB devices
+      * sudo dmesg - will also show when they are discovered
+
+Linux/Ubuntu/NVIDIA tools for monitoring utilization
+      * For GPUs it is important to associate the GPUs PCI Address with the GPU UUID (index is relative)
+      * nvidia-smi --query-gpu=index,pci.bus_id,uuid --format=csv
+      * top  - Show the linux top process based on CPU, memory (rss) virtual memory
+      * htop 
+
+View the processes on GPUs
+      * nvidia-smi pmon
+      * nvidia-smi dmon -s pc
+
+Show GPU view power, temp, memory on GPUs over time
+      * nvidia-smi dmon
+
+Show GPU stats and environment over time in CSV format
+      * nvidia-smi --query-gpu=index,pci.bus_id,uuid,fan.speed,utilization.gpu,utilization.memory,temperature.gpu,power.draw --format=csv -l
+Find various options for –query-gpu:
+      * nvidia-smi --help-query-gpu
+On Commercial GPUs like A100’s there are some special options like:
+      * GPU Memory Temperature, Memory errors, Memory remapping
+      * You can see these all through:
+           nvidia-smi -q
+      * You can monitor for memory temperature also:
+           nvidia-smi --query-gpu=index,pci.bus_id,uuid,pstate,fan.speed,utilization.gpu,utilization.memory,temperature.gpu,temperature.memory,power.draw --format=csv -l
+   
+      * Watch for remapped memory (requires a reboot/reset of the GPU):
+        nvidia-smi --query-remapped-rows=gpu_bus_id,gpu_uuid,remapped_rows.correctable,remapped_rows.uncorrectable,remapped_rows.pending,remapped_rows.failure --format=csv
+            * 8 banks in a row can be remapped, but requires a reboot between each remap.
+            * After 8 banks in a row are remapped the GPU or chassis (SXM) needs to be reworked.
+            * If remapped_rows.failure == yes  ; Disable GPU ; Machine needs a RMA to repair
+            * If remapped_rows.pending == yes ; then GPU needs to be reset (commonly high number of aggregate errors).
+
+      * Watch for Volatile (current boot session - more accurate) and Aggregate (life time of GPU - in theory all but misses some) memory errors:
+          To see the various memory errors to track:
+            nvidia-smi --help-query-gpu | grep "ecc.err"
+            For example:
+             All volatile memory errors (this boot session or since a GPU reset):
+              nvidia-smi --query-gpu=index,pci.bus_id,uuid,ecc.errors.corrected.volatile.dram,ecc.errors.corrected.volatile.sram  --format=csv
+              All volatile uncorrected memory errors:
+                nvidia-smi --query-gpu=index,pci.bus_id,uuid,ecc.errors.corrected.volatile.dram,ecc.errors.corrected.volatile.sram  --format=csv
+             All Aggregate corrected memory errors:
+               nvidia-smi --query-gpu=index,pci.bus_id,uuid,ecc.errors.uncorrected.aggregate.dram,ecc.errors.uncorrected.aggregate.sram --format=csv
+            All Aggregate uncorrected memory errors:
+              nvidia-smi --query-gpu=index,pci.bus_id,uuid,ecc.errors.uncorrected.aggregate.dram,ecc.errors.uncorrected.aggregate.sram --format=csv
+	
+
+Linux/Ubuntu commands for Lambda
+  system monitoring
+      * top
+      * htop
+      * nvtop
+      * nvidia-smi pmon 
+      * ps -elf (ps aux) to see running processes
+      * free – see the amount of memory and swap;  used and available
+
+  Navigating and finding files
+      * pwd – Present working directory
+      * ls     - see files in your current directory
+      * cd <name> - to change to a new directory
+      * find . -name ‘example*’   - Find files that start with the name ‘example’
+
+  Disk and file systems
+      * df -h – Show how much space is in all file systems
+      * df -ih – show how many inodes (number of files) on each file system
+      * du -s * | sort -n    - Show the largest files/directories in the current directory
+      * du -sh example.tar.gz – show how large a file ‘example.tar.gz’
+      * duf - a little more friendly format (sudo apt install duf)
+      * Graphical view: 
+         $ sudo apt install xdiskusage
+         $ sudo xdiskusage
+
+
+  Networking:
+      * ip address show - Long list of information about interfaces
+      * ip -br address show -  more brief version of the commands
+      * ip addr show dev <dev> - show address for one interface
+      * example: ip addr show dev eth0
+      * ip link  - show links
+      * ip -br link – brief view of the links
+      * ip route – show routes on your system
+      * ip tunnel
+      * ip n - replace arp find MAC and IP addresses on the network
+      * ping -c 3 10.0.0.1    - Ping the IP address 10.0.0.1  three times
+      * traceroute 10.0.0.1  - Check the route and performance to IP address 10.0.0.1
+      * /etc/netplan – Location of the network interface configurations.
+
+
+  Managing users:
+      * group <username> - Check if there is a ‘user’ and which groups they are in
+      * sudo adduser <username> - Adding a new user
+      * sudo deluser <username>  - Deleting a existing username
+      * sudo adduser <username> <group> - Add a ‘user’ to a ‘group’ both that existing
+      * sudo deluser <username> <group>  - Delete/remove a ‘user’ from a ‘group’
+
+
+  Firewall:
+      * sudo iptables -L  - List iptables rules
+         This is switching to ‘nftables’
+      * sudo nft -a list ruleset
+      * sudo ufw status  - Show the status of the ufw
+      * Example adding ssh to UFW firewall:
+      * sudo ufw allow ssh
+
+
+  Linux and Lambda Stack upgrades and packaging:
+      * sudo apt-get update          - Update the list of packages from repository (sync up)
+      * apt list --upgradeable       - list upgradable packages (after the update)
+      * sudo apt-get upgrade         - Upgrade packages
+      * sudo apt-get dist-upgrade    - more aggressive upgrade - can remove packages
+      * sudo apt full-upgrade        - more aggressive upgrade - can remove packages
+      * dpkg -L <installed package>  - List the contents of a given packages
+      * dpkg -S <full path to file>  - show the package a file came from
+      * dpkg –list                   - Show the list of packages
+      * apt list --installed
+
+Linux/Ubuntu security managing user access:
+      * iptables -L                  - List firewall rules
+      * /etc/sudoers                 - Contains a list of sudo rules
+      * visudo                       - to edit sudoers to change rules
+      * sudo adduser <use> sudo      - Add a user to the sudo group, which gives them full root access via sudo, use caution.
+        Example: (Add the user 'john' to the 'sudo' group
+           $ sudo adduser john sudo
+
+Linux/Ubuntu NVIDIA GPU
+      * nvtop - watch the GPUs utilization and memory utilization
+      * nvidia-smi - see the driver version (supported CUDA and usage)
+      * note the persistence mode
+      * nvidia-smi -q - gives more detailed information for each GPU
+   NVlink information:
+      * nvidia-smi topo -m  - To see the NVLink connection topology
+      * nvidia-smi nvlink -s - To see the rates per link
+   See logged errors:
+      * grep "kernel: NVRM: Xid" /var/log/kern.log
+
+Boot modes for linux:
+  Find the current setting for boot level:
+      $ systemctl get-default
+  Set to boot to Multi-user (non-graphical):
+      $ sudo systemctl set-default multi-user
+  Set to boot to Graphical mode:
+      $ sudo systemctl set-default graphical
+
+  Change now (temporarily) to multi-user:
+      $ sudo systemctl isolate multi-user
+  Change now (temporarily) to Graphical:
+      $ sudo systemctl isolate graphical
+
+
+Containers and Virtual Environments:
+      See examples:
+         https://github.com/markwdalton/lambdalabs/tree/main/documentation/software/examples/virtual-environments
+      * Docker/Singularity - Make use of NVIDIA's Container Catalog: https://catalog.ngc.nvidia.com/
+      * Python venv - Developed by Python - so this is recommended - supports isolated or using system site default packages.
+      * viritualenv - a group independently developed for Python 2.0, still around but recommend move to python venv.
+      * Anaconda - Recent years license changes - companies should be aware of the license.
+
+    Docker
+      See the Lambda Docker PyTorch Tutorial:
+        https://lambdalabs.com/blog/nvidia-ngc-tutorial-run-pytorch-docker-container-using-nvidia-container-toolkit-on-ubuntu
+      Install docker (with Lambda Stack installed):
+        * sudo apt-get install -y docker.io nvidia-container-toolkit
+        * sudo systemctl daemon-reload
+        * sudo systemctl restart docker
+      Finding many docker images for Deep Learning
+        * https://catalog.ngc.nvidia.com/
+      Pull a docker image
+        * sudo docker pull <image name>
+        * sudo docker pull nvcr.io/nvidia/tensorflow:22.05-tf1-py3
+        * sudo docker pull nvcr.io/nvidia/pytorch:22.05-py3
+      Run Docker (it will pull the image if not found)
+        * sudo docker run --gpus all -it --rm nvcr.io/nvidia/pytorch:22.05-py3
+      List running docker containers
+        * docker ps
+      List docker images
+        * docker images
+      Mount a directory in a docker image on start up
+        * sudo docker run --gpus all -it --rm -v `pwd`/data:/data/ nvcr.io/nvidia/pytorch:22.05-py3 
+         You can add a command to the end of the line: ls, python code
+         Mounts the ‘data’ directory from the current directory into the container as /data.
+      Copy a file from the host to the container
+        * docker cp input.txt container_id:/input.txt
+      Copy a file from the container to the local file system
+        * docker cp container_id:/output.txt output.txt
+      Copy a group of files in the ‘data’ directory to the container
+        * docker cp data/. container_id:/target
+      Copy a group of files in the container ‘output’ directory to local host
+        * docker cp container_id:/output/. target
+        * mark@lambda-dual:~/lambda/tickets/8021$ cat ~/lambda/docker.txt
+        * docker create or docker run:
+        *                   *   -a, --attach               # attach stdout/err
+        *   -i, --interactive          # attach stdin (interactive)
+        *   -t, --tty                  # pseudo-tty
+        *       --name NAME            # name your image
+        *   -p, --publish 5000:5000    # port map
+        *       --expose 5432          # expose a port to linked containers
+        *   -P, --publish-all          # publish all ports
+        *       --link container:alias # linking
+        *   -v, --volume `pwd`:/app    # mount (absolute paths needed)
+        *   -e, --env NAME=hello       # env vars
+        *                   * for 'docker run':
+        *   --rm true|false
+        *        Automatically remove the container when it exits. The default is false.
+
+      Example to run on ALL GPUs, interactive, with a tty, and remove the running container on exit.
+          $ docker run --gpus all -it --rm nvcr.io/nvidia/pytorch:22.05-py3 nvidia-smi
+      List the ports mapped example:
+        Look for running images:
+          $ docker ps
+            CONTAINER ID   IMAGE                              COMMAND                  CREATED        STATUS       PORTS                                       NAMES
+            e7fa01d97208   dalle-playground_dalle-interface   "docker-entrypoint.s…"   3 months ago   Up 8 hours   0.0.0.0:3000->3000/tcp, :::3000->3000/tcp   dalle-interface
+
+        Look at the port mapping for that running image:
+          $ docker port e7fa01d97208
+            3000/tcp -> 0.0.0.0:3000
+            3000/tcp -> :::3000
+
+Kubernetes
+   List all pods in the current namespace:
+      kubectl get pods
+   List all pods in all namespaces:
+      kubectl get pods --all-namespaces
+   List all services in the current namespace:
+   kubectl get services
+   List all deployments in the current namespace:
+      kubectl get deployments
+   List all nodes in the cluster:
+      kubectl get nodes
+   Describe a pod:
+      kubectl describe pod <pod-name>
+   Describe a service:
+      kubectl describe service <service-name>
+   Describe a deployment:
+      kubectl describe deployment <deployment-name>
+   Create a new deployment:
+      kubectl create deployment <deployment-name> --image=<image-name>
+   Update a deployment:
+      kubectl set image deployment <deployment-name> <container-name>=<new-image-name>
+   Scale a deployment:
+      kubectl scale deployment <deployment-name> --replicas=<replica-count>
+   Delete a deployment:
+      kubectl delete deployment <deployment-name>
+   Delete a pod:
+      kubectl delete pod <pod-name>
+   Delete a service:
+      kubectl delete service <service-name>
+
+
+For servers with IPMI:
+Install ipmitool:
+  $ sudo apt-get install ipmitool
+List the users
+  $ sudo ipmitool user list
+Change the password for User ID 2 (from previous ‘user list’)
+  $ sudo ipmitool user set password 2
+        Then, enter the new password twice.
+Cold reset the BMC - normally only needed when the BMC is not getting updates:
+  $ sudo ipmitool mc reset cold
+Print the BMC network information:
+  $ sudo ipmitool lan print
+Print the BMC Event log
+  $ sudo ipmitool sel elist
+Print Sensor information:
+  $ sudo ipmitool sdr
+  $ sudo ipmitool sensor
+Print Information about the system:
+  $ sudo ipmitool fru
+Power Status:
+     $ sudo ipmitool power status
+Power control server:
+     $ sudo ipmitool power [status|on|off|cycle|reset|diag|soft]
+Power on server:
+     $ sudo ipmitool power on
+Power off server:
+     $ sudo ipmitool power off
+Power cycle server:
+     $ sudo ipmitool power cycle
+Power reset the server:
+     $ sudo ipmitool power reset
+
+
+IPMI Example setting up a static IP address:
+If you were given:
+   IPMI/BMC IP address: 10.100.1.132
+    Netmask: 255.255.255.0
+    Gateway: 10.100.1.1
+
+
+Then the configuration would be:
+                  * Confirm current settings:
+           $ sudo ipmitool lan print 1
+                  * Set the IPMI Interface to Static (default is dhcp)
+           $ sudo ipmitool lan set 1 ipsrc static
+                  * Set the IP Address:
+           $ sudo ipmitool lan set 1 ipaddr 129.105.61.139
+                  * Set the netmask for this network:
+           $ sudo ipmitool lan set 1 netmask 255.255.255.0
+                  * Set the Default Gateway
+           $ sudo ipmitool lan set 1 defgw ipaddr 129.105.61.1
+                  * Set/confirm that LAN (network) access is enabled:
+           $ sudo ipmitool lan set 1 access on
+
+
+Common request is getting the sensor and event log output..
+1. On the node from linux:
+        $ sudo apt install ipmitool
+        $ sudo ipmitool sdr >& ipmi-sdr.txt
+        $ sudo ipmitool sel elist >& ipmi-sel.txt
+        
+      Or from a remote linux machine:
+         $ ipmitool -I lanplus -H IP_ADDRESS -U ADMIN -P "PASSWORD" sel elist >& ipmi-sel.txt
+         $ ipmitool -I lanplus -H IP_ADDRESS -U ADMIN -P "PASSWORD" sdr >& ipmi-sdr.txt
+            ** Where 'PASSWORD' would be your IPMI password, and IP_ADDRESS is your  
+               machines BMC/IPMI ip address.
+ 
+Or at least the Web GUI can save the cvs of the eventlog.
+     BMC/IPMI -> Logs and Reports -> Event Log -> Save to excel (CSV).
+
+
+Networking -> Infiniband
+     * lsmod | egrep “mlx|ib”
+     * ibstat
+     * ibstatus
+     * ibv_devinfo
+     * ibswitch
+     * ibhosts
+     * lspci | grep Mellanox
+     * lspci | egrep -i "mellanox|mlnx|mlx[0-9]_core|mlnx[0-9]_ib"
+     * dmesg | egrep -i "mellanox|mlnx|mlx[0-9]_core|mlnx[0-9]_ib"
+     * Check for errors like insufficient power
+     * lsmod | grep rdma
+     * mst start
+     * mst status -v
+     * opensm needs to be running either on the switch or at least one of the nodes
