@@ -26,12 +26,13 @@ Check your installed packages:
     $ sudo apt update
     $ sudo apt install python3-venv
 2. Create a new environment 
+   This will take advantage of your system-wide installed python modules:
+    $ python -m venv --system-site-packages myvenv
+   or you may need to do a more isolated environment:
     $ python -m venv myvenv
 3. Activate the environment:
     $ .  ./myvenv/bin/activate
-4. Run a simple test with the base install:
-   TF_CPP_MIN_LOG_LEVEL=3 python -c 'import tensorflow as tf; print("\nTensorflow version: ",tf.__version__, "\nTensorflow file: ",tf.__file__) ; print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices("GPU")))'
-5. Install packages (like tensorrt).
+4. Install any needed packages (like tensorrt).
    $ pip install nvidia-tensorrt
 
    On a older python3.8 release (still the latest 525.60.* driver, CUDA 11.8, tensorflow 11.2), I needed to install
@@ -41,18 +42,20 @@ Check your installed packages:
    Other dependencies, just to make sure they are installed (default current version works fine):
      $ pip install pandas scikit-learn matplotlib numpy
 
-6. The good news is nvidia-tensorrt does install the libraries in the correct place so they are picked up.
+4. Run a simple test with the base install:
+   TF_CPP_MIN_LOG_LEVEL=3 python -c 'import tensorflow as tf; print("\nTensorflow version: ",tf.__version__, "\nTensorflow file: ",tf.__file__) ; print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices("GPU")))'
+5. The good news is nvidia-tensorrt does install the libraries in the correct place so they are picked up.
    (By default Anaconda/Miniconda does not for cuDNN, and I need to setup up the LD_LIBRARY_PATH)
    And you may for TensorFlow need to do the LD_LIBRARY_PATH for the locally install cudnn.
 
-7. Run the code:
+6. Run the code:
    Quietly (without the verbose tensorflow messages):
      $ TF_CPP_MIN_LOG_LEVEL=3 python quick.py
    Or by default if you want to see the specifics:
      $ python quick.py
 
 Example:
-mark@lambda-dual:~/lambda/documentation/lambdastack-python-venv-tensorflow$ python -m venv myvenv
+mark@lambda-dual:~/lambda/documentation/lambdastack-python-venv-tensorflow$ python -m venv --system-site-packages myvenv
 
 mark@lambda-dual:~/lambda/documentation/lambdastack-python-venv-tensorflow$ . myvenv/bin/activate
 (myvenv) mark@lambda-dual:~/lambda/documentation/lambdastack-python-venv-tensorflow$ 
