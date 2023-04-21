@@ -29,7 +29,7 @@
       ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/MotherBoard-WRX80E-SAGE-SE.png "Motherboard")</p>
 
 8. Turn the BMC and IPMI Switches on:
-   - Turn on BMC Switch
-     ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-SAGE-BMC-Switch.png "Turn BMC Switch On")</p>
-   - Turn on the IPMI Switch:
-     ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-SAGE-IPMI-Switch.png "Turn IPMI Switch On")</p>
+   Turn on BMC Switch:
+   ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-SAGE-BMC-Switch.png "Turn BMC Switch On")</p>
+   Turn on the IPMI Switch:
+   ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-SAGE-IPMI-Switch.png "Turn IPMI Switch On")</p>
