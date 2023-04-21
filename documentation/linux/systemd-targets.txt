@@ -28,7 +28,7 @@ List status for a given timer:
 
 Masking - making them 'invisible' effectively:
 This would disable sleep/hibernate/suspend:
-  sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+  sudo systemctl mask hibernate.target hybrid-sleep.target suspend-then-hibernate.target sleep.target suspend.target
 
 To unmask a startup script, in this example 'nvidia-persistenced'
   $ sudo systemctl mask nvidia-persistenced
