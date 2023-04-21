@@ -21,15 +21,16 @@
 6. Display issues
    - https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/display-issues.md
 
-### Case: Lian Li O11D XL
-    - https://lian-li.com/product/pc-o11d-rog/
-
 7. On the WRX80E motherboard specifically:
       -> Motherboard:
       ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/MotherBoard-WRX80E-SAGE-SE.png "Motherboard")</p>
 
 8. Turn the BMC and IPMI Switches on:
-   Turn on BMC Switch:
+   Turn on BMC Switch (to the left):
    ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-SAGE-BMC-Switch.png "Turn BMC Switch On")</p>
-   Turn on the IPMI Switch:
+   Turn on the IPMI Switch (to the left):
    ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-SAGE-IPMI-Switch.png "Turn IPMI Switch On")</p>
+
+### Case: Lian Li O11D XL
+    - https://lian-li.com/product/pc-o11d-rog/
+
