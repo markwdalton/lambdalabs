@@ -44,6 +44,14 @@ Power cycle server:
      $ sudo ipmitool power cycle
 Power reset the server:
      $ sudo ipmitool power reset
+Check time and set time:
+     $ sudo ipmitool sel time get
+     $ sudo ipmitool sel time set "$(date '+%m/%d/%Y %H:%M:%S')"
+     $ ipmitool sel time get
+          Or
+     $ sudo ipmitool sel time set now
+     $ sudo hwclock --systohc
+
 
 IPMI Example setting up a static IP address:
   If you were given:
