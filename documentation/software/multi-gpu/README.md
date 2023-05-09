@@ -22,8 +22,7 @@ From the above, summary:
 
 - Data Parallelism (DP) - easy to use
 - Distributed Data Parallelism (DDP) - this is typically faster and easy to use
-- Fully Shared Data Parallel(FSDP) - FSDP is a type of data parallelism that shards model parameters, optimizer states and gradients across DDP ranks.
-<p>    https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api/</p>
+- Fully Shared Data Parallel(FSDP) - FSDP is a type of data parallelism that shards model parameters, optimizer states and gradients across DDP ranks.  https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api/
 - ZeRO Data Parallel(ZeRO-DP) - each GPU stores a slice (and a alternate Sharded DDP)
 - Model Parallel (MP) - spreads groups of models across GPUs (vertically)
 - Pipeline Parallel (PP) - chunking the incoming batch into micro-batches and artificially creating a pipeline
