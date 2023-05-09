@@ -6,10 +6,14 @@ the same model is on each GPU and you run in parallel over that model.
 
 NVLink allows you to have fast access between GPUs that are linked.
 * To see linked GPUs, this will show a matrix of which GPUs are linked
-<p>$ nvidia-smi topo -m</p>
-* To the speed of each of the lanes per link
-<p>$ nvidia-smi nvlink -s</p>
+```bash
+   $ nvidia-smi topo -m
+```
 
+* To the speed of each of the lanes per link
+```bash
+   $ nvidia-smi nvlink -s
+```
 For Pytorch guides see: <A HREF="https://github.com/markwdalton/lambdalabs/tree/main/documentation/software/multi-gpu/PyTorch-examples.md">PyTorch-examples.md</A> 
 
 First you should understand the type of parallelism you want:
