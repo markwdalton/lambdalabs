@@ -18,6 +18,7 @@ For Pytorch guides see: <A HREF="https://github.com/markwdalton/lambdalabs/tree/
 
 First you should understand the type of parallelism you want:
 - https://huggingface.co/transformers/v4.9.0/parallelism.html
+
 From the above, summary:
 
 - Data Parallelism (DP) - easy to use
@@ -29,14 +30,14 @@ From the above, summary:
 - Tensor Parallel (TP) - each GPU processes only a slice of a tensor and only aggregates the full tensor for operations that require the whole thing
 - FlexFlow - solves in a alternate way, parallelism over Sample-Operator-Attribute-Parameter
 - Elastic Training - dynamically scale training resources for deep learning models, running PyTorch jobs on multiple GPUs and/or machines
-<p>     * as described https://www.run.ai/guides/multi-gpu/pytorch-multi-gpu-4-techniques-explained </p>
+* as described https://www.run.ai/guides/multi-gpu/pytorch-multi-gpu-4-techniques-explained
   
 ..  And you can mix these DP+PP, DP+PP+TP, DP+PP+TP+ZeRO
 ..  This covers the 'which to use when' question also.
 
 #Next is how you do parallel across nodes, Distributed Communication packages:
-<p>*https://pytorch.org/docs/stable/distributed.html</p>
-<p></p>
+* https://pytorch.org/docs/stable/distributed.html
+
 * NCCL - https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/overview.html - likely the fastest solution for GPUs
 * GLOO - https://github.com/facebookincubator/gloo
 * MPI - https://mpi4py.readthedocs.io/en/stable/tutorial.html - Python implementation is not as good as MPI in other langauges.
