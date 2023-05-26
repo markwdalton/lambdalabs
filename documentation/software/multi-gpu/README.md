@@ -33,6 +33,7 @@ From the above, summary:
   
 And you can mix these DP+PP, DP+PP+TP, DP+PP+TP+ZeRO.  This also covers the 'which to use when' question also.
 
+<b>Multi-GPU for Large Models<A HREF="https://lilianweng.github.io/posts/2021-09-25-train-large/">Training on Large Models on Many GPUs</A></b>
 <b>Next is how you do parallel across nodes, Distributed Communication packages: <A HREF="https://pytorch.org/docs/stable/distributed.html">Pytorch Distrbituted</A></b>
 
 * NCCL - https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/overview.html - likely the fastest solution for GPUs
