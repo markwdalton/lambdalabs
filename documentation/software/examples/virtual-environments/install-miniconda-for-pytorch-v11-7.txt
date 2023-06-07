@@ -35,12 +35,19 @@ Check your:
         $  conda activate torch_cuda_11-7
 
 4. Run the code:
-$ python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.__version__) ; print("pytorch file: ", torch.__file__) ; available_gpus = [torch.cuda.device(i) for i in range(torch.cuda.device_count())] ; print("Available GPUS: ",len(available_gpus))'
+$ python -c 'import torch ; print("\nIs available: ", torch.cuda.is_available()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.__version__) ; print("pytorch file: ", torch.__file__) ; num_of_gpus = torch.cuda.device_count(); print("Number of GPUs: ",num_of_gpus)'
 
 Is available:  True
 Pytorch CUDA Compiled version:  11070
 Pytorch version:  2.0.1
 pytorch file:  /home/support/miniconda3/envs/torch_cuda_11-7/lib/python3.11/site-packages/torch/__init__.py
-Available GPUS:  4
+Number of GPUs:  4
 
+
+Print and see the type of GPUs:
+$ python - <<EOF
+import torch
+for i in range(torch.cuda.device_count()):
+   print(torch.cuda.get_device_properties(i).name)
+EOF
 
