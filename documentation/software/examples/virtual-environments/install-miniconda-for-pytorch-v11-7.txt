@@ -34,17 +34,13 @@ Check your:
      b. Activate the environement:
         $  conda activate torch_cuda_11-7
 
-conda create -n torch_cuda_11-7 pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
-     b. Activate the Miniconda environment:
-        $ conda activate torch_cuda_11-7
-
 4. Run the code:
-   $ python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.version) ; print("pytorch file: ", torch.__file__)'
+$ python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.__version__) ; print("pytorch file: ", torch.__file__) ; available_gpus = [torch.cuda.device(i) for i in range(torch.cuda.device_count())] ; print("Available GPUS: ",len(available_gpus))'
 
-      Is available:  True
+Is available:  True
+Pytorch CUDA Compiled version:  11070
+Pytorch version:  2.0.1
+pytorch file:  /home/support/miniconda3/envs/torch_cuda_11-7/lib/python3.11/site-packages/torch/__init__.py
+Available GPUS:  4
 
-      Current Device:  0
-      Pytorch CUDA Compiled version:  11070
-      Pytorch version:  <module 'torch.version' from '/home/m/miniconda3/envs/torch_cuda_11-7/lib/python3.10/site-packages/torch/version.py'>
-      pytorch file:  /home/m/miniconda3/envs/torch_cuda_11-7/lib/python3.10/site-packages/torch/__init__.py
 
