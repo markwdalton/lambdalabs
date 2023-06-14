@@ -6,9 +6,9 @@ Specific issues:
 3. Or the USB Ubuntu live would get to grub and start, but could not find the USB root.
 
 The workaround has been:
-a. Fastboot should always be disabled in the BIOS
-b. The new thing is SR-IOV needed to be <b>Enabled</b> in the BIOS (image below).
-c. At times we have seen the need to set on the kernel line: pci=realloc=off
+1. Fastboot should always be disabled in the BIOS
+2. The new thing is SR-IOV needed to be <b>Enabled</b> in the BIOS (image below).
+3. At times we have seen the need to set on the kernel line: pci=realloc=off
 
 As shown in the following images:
       ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/ASUS-WRX80E-SR-IOV-BIOS-Setting.png "Enable SR-IOV in the BIOS")</p>
