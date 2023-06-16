@@ -18,3 +18,7 @@
   $ ibstat
 ```
 * This will provide commands for other examples and monitoring
+
+3. Example of the web page for download menu:
+![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/infiniband/Mellanox-OFED-Download.png "Mellanox OFED Download Menu")</p>
+
