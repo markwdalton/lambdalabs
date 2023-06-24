@@ -17,8 +17,9 @@ Specific issues:
     <dd>We have seen issues with the display.⋅⋅</dd>
     <dd>Solution: Power off the machine and unplug.  Then Toggle the switch to Disabled</dd>
 </dl>
-      ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-VGA-switch-27.png "Motherboard switches")</p>
-      ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-VGA-Switch-detail.png "Toggle Switch 27 to Disabled")</p>
+
+![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-VGA-switch-27.png "Motherboard switches")</p>
+![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-VGA-Switch-detail.png "Toggle Switch 27 to Disabled")</p>
 
 <dl>
     <dt>Sometimes the CMOS needs to be reset after shipping.</dt>
@@ -27,6 +28,6 @@ Specific issues:
     <dd>- Press and hold the Clear CMOS button for 10 seconds</dd>
 </dl>
 
-        ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-SAGE-SE-Clear-CMOS.png "Press the Clear CMOS button")</p>
-        ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-SAGE-SE-Clear-CMOS-diagram.png "Press the Clear CMOS button")</p>
+![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-SAGE-SE-Clear-CMOS.png "Press the Clear CMOS button")</p>
+![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-SAGE-SE-Clear-CMOS-diagram.png "Press the Clear CMOS button")</p>
 
