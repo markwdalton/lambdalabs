@@ -8,6 +8,7 @@ General Issues:
 4. Cable converters and extenders
 
 Specific issues:
+
 ```
 1. Problem with the GPU (Each GPU has different connectors DPI, HDMI, Display Port(DP), and some with USB-C.
 2. On the WRX80E motherboard specifically:
@@ -15,8 +16,10 @@ Specific issues:
       We have seen issues with the display.
       -> Solution: Power off the machine and unplug.  Then Toggle the switch to Disabled 
 ```
+
       ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-VGA-switch-27.png "Motherboard switches")</p>
       ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/motherboards/ASUS-WRX80E/WRX80E-VGA-Switch-detail.png "Toggle Switch 27 to Disabled")</p>
+
 ```
    b. Sometimes the CMOS needs to be reset after shipping.
       - Shutdown machine
