@@ -32,5 +32,5 @@
 ..*Use a SSH tunnel to access the host port
 ..*You can also setup a SSL certificate (self-signed or with a valid IP a registered one).  Then you could go to a open IP address for remote use.
 
-![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/notebook-with-virtual-envsjupyter-notebook-confirm-pip.png "Jupyter Notebook confirm pip install")</p>
+![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/notebook-with-virtual-envs/jupyter-notebook-confirm-pip.png "Jupyter Notebook confirm pip install")</p>
 
