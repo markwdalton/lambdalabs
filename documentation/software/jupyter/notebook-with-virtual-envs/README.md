@@ -25,12 +25,13 @@
        python3      /home/username/.local/share/jupyter/kernels/python3
 ```
 4. Start Jupyter notebook or Jupyter lab.  You do not need the environment activated.
-
+..*Select a environment:
+![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/jupyter-notebook-select-environment.jpg "Jupyter Notebook Select Environment")
+..*Confirm the environment in Jupyter Notebook with pip:
+![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/notebook-with-virtual-envs/jupyter-notebook-confirm-pip.png "Jupyter Notebook confirm pip install")
 
 5. You can make it accessable to remote hosts:
 
 ..*Use a SSH tunnel to access the host port
 ..*You can also setup a SSL certificate (self-signed or with a valid IP a registered one).  Then you could go to a open IP address for remote use.
-
-![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/notebook-with-virtual-envs/jupyter-notebook-confirm-pip.png "Jupyter Notebook confirm pip install")</p>
 
