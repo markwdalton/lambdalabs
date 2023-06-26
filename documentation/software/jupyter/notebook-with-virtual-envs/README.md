@@ -25,11 +25,11 @@
        python3      /home/username/.local/share/jupyter/kernels/python3
 ```
 4. Start Jupyter notebook or Jupyter lab.  You do not need the environment activated.
-..*Select a environment:
-<p>![alt_text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/notebook-with-virtual-envs/jupyter-notebook-select-environment.jpg) "Jupyter Notebook Select Environment")</p>
 
+..*Select a environment:
+..*<p>![alt_text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/notebook-with-virtual-envs/jupyter-notebook-select-environment.jpg) "Jupyter Notebook Select Environment")</p>
 ..*Confirm the environment in Jupyter Notebook with pip:
-![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/notebook-with-virtual-envs/jupyter-notebook-confirm-pip.png "Jupyter Notebook confirm pip install")
+..*![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/notebook-with-virtual-envs/jupyter-notebook-confirm-pip.png "Jupyter Notebook confirm pip install")
 
 5. You can make it accessable to remote hosts:
 
