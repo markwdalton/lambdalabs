@@ -19,7 +19,7 @@
    $ sudo apt install smartmontools
 ```
 4. Run a script that will find and check each drive:
-Download script:
+<p>Download script:</p>
 ```
    $ wget https://github.com/markwdalton/lambdalabs/blob/main/hw-debugging-scripts/check-drives.sh
 ```
