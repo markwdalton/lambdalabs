@@ -5,7 +5,8 @@
 ```
   * If there were past fsck's done.  fsck needing to be done is a sign of a problem.
   * You can check the BIOS to see if it can see the drive.
-  * The most reliable way is to boot from a 'Ubuntu Install USB' and select 'Try Ubuntu' on the desktop install or hit 'control-z' on server installs. (instructions below).
+  * The most reliable way is to boot from a 'Ubuntu Install USB' and select 'Try Ubuntu'
+    on the desktop install or hit 'control-z' on server installs. (instructions below).
 ```
 
 # Boot from USB Install Drive and do a drive check (smartctl).
