@@ -10,23 +10,21 @@
 # Boot from USB Install Drive and do a drive check (smartctl).
 1. Download either Ubuntu 22.04 LTS (Desktop or Server for servers).
 2. On the Desktop version:
-..*Select 'Try Ubuntu' versus install
-..*Open a Terminal (control-alt-t)
-..*Install 'smartmontools':
+```
+   * Select "Try Ubuntu" versus install:
+   * Open a Terminal (control-alt-t):
+```
+3. Install smartmontools:
 ```
    $ sudo apt install smartmontools
 ```
-..*Run lsblk to see what drives are found:
-```
-$ sudo lsblk
-```
-3. Run a script that will find and check each drive:
-..*Download script:
+4. Run a script that will find and check each drive:
+Download script:
 ```
    $ wget https://github.com/markwdalton/lambdalabs/blob/main/hw-debugging-scripts/check-drives.sh
 ```
 
-..*Run the script:
+Run the script:
 ```
   $ sudo sh ./check-drives.sh
     - This will create a directory check-drives
