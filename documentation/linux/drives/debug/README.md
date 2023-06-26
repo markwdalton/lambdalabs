@@ -28,6 +28,7 @@
 ```
 
 <p>Run the script:</p>
+
 ```
   $ sudo sh ./check-drives.sh
     - This will create a directory check-drives
