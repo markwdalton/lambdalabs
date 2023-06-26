@@ -25,6 +25,15 @@
        python3      /home/username/.local/share/jupyter/kernels/python3
 ```
 4. Start Jupyter notebook or Jupyter lab.  You do not need the environment activated.
+```
+   $ jupyter notebook
+  or
+   $ jupyter lab
+
+   [I 09:14:00.275 NotebookApp] Serving notebooks from local directory: /home/username/.jupyter
+   [I 09:14:00.275 NotebookApp] Jupyter Notebook 6.4.8 is running at:
+   [I 09:14:00.275 NotebookApp] https://lambda-dual:9999/
+```
 Select the Environment:
 ![alt_text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/notebook-with-virtual-envs/jupyter-notebook-select-environment.jpg) "Jupyter Notebook Select Environment")
 
