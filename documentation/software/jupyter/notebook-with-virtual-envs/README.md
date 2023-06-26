@@ -26,7 +26,8 @@
 ```
 4. Start Jupyter notebook or Jupyter lab.  You do not need the environment activated.
 ..*Select a environment:
-![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/jupyter-notebook-select-environment.jpg "Jupyter Notebook Select Environment")
+<p>![alt_text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/notebook-with-virtual-envs/jupyter-notebook-select-environment.jpg) "Jupyter Notebook Select Environment")</p>
+
 ..*Confirm the environment in Jupyter Notebook with pip:
 ![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/software/jupyter/notebook-with-virtual-envs/jupyter-notebook-confirm-pip.png "Jupyter Notebook confirm pip install")
 
