@@ -27,11 +27,15 @@ Print the BMC network information:
      $ sudo ipmitool lan print
 Print the BMC Event log
      $ sudo ipmitool sel elist
+Clear the Event log (sometimes needed for hung BMC's):
+     $ sudo ipmitool sel clear
 Print Sensor information:
      $ sudo ipmitool sdr
      $ sudo ipmitool sensor
 Print Information about the system:
      $ sudo ipmitool fru
+Get the last POST code (on Supermicro chassis):
+    $ sudo ipmitool -I -H -U -P raw 0x30 0x2a
 Power Status:
      $ sudo ipmitool power status
 Power control server:
