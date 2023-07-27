@@ -1,6 +1,10 @@
 NVIDIA GPUs and common questions/issues.
 
-1. nvidia-smi Driver versus CUDA version
+1. We have seen issues with GPUs or other devices not being seen.
+   * BAR memory use issues - update BIOS: SR_IOV=Enabled
+   * Update Kernel Boot Parameters: 'pci=realloc=off'
+   * More detail can be seen in [updating kernel parameters](https://github.com/markwdalton/lambdalabs/blob/main/documentation/linux/linux-kernel-boot-options.md)
+2. nvidia-smi Driver versus CUDA version
    * nvidia-smi shows the Driver version, and the max version of CUDA the driver supports.
    * The driver needs to support the same or new version of CUDA than you are using.
 
