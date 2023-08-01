@@ -29,27 +29,33 @@ Check your installed packages:
     $ python -m venv myvenv
 3. Activate the environment:
     $ .  ./myvenv/bin/activate
-4. Run a simple test with the base install:
+4. Install tensorflow 
+    $ pip install tensorflow
+5. Run a simple test with the base install:
    TF_CPP_MIN_LOG_LEVEL=3 python -c 'import tensorflow as tf; print("\nTensorflow version: ",tf.__version__, "\nTensorflow file: ",tf.__file__) ; print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices("GPU")))'
-5. Install packages (like tensorrt).
-   $ pip install nvidia-tensorrt
+6. Install packages (like tensorrt).
+   $ pip install nvidia-tensorrt==8.4.1.5
+     At times there are bugs/issues with the default: pip install nvidia-tensorrt
 
    On a older python3.8 release (still the latest 525.60.* driver, CUDA 11.8, tensorflow 11.2), I needed to install
      $ pip install nvidia-pyindex
      $ pip install nvidia-tensorrt
 
-   Other dependencies, just to make sure they are installed (default current version works fine):
+7. Install other dependencies:
      $ pip install pandas scikit-learn matplotlib numpy
 
-6. The good news is nvidia-tensorrt does install the libraries in the correct place so they are picked up.
+8. The good news is nvidia-tensorrt does install the libraries in the correct place so they are picked up.
    (By default Anaconda/Miniconda does not for cuDNN, and I need to setup up the LD_LIBRARY_PATH)
    And you may for TensorFlow need to do the LD_LIBRARY_PATH for the locally install cudnn.
 
-7. Run the code:
+9. Run the code:
    Quietly (without the verbose tensorflow messages):
      $ TF_CPP_MIN_LOG_LEVEL=3 python quick.py
    Or by default if you want to see the specifics:
      $ python quick.py
+
+   At different times/versions as they change the underlying tensorflow, nvidia-tensorrt, I have to change the environment variables:
+     $ TF_CPP_MIN_LOG_LEVEL=3 XLA_FLAGS=--xla_gpu_cuda_data_dir=/usr/lib/cuda LD_LIBRARY_PATH=${VIRTUAL_ENV}/lib/python3.10/site-packages/nvidia/cudnn/lib python ./quick.py
 
 Example:
 mark@lambda-dual:~/lambda/documentation/lambdastack-python-venv-tensorflow$ python -m venv myvenv
@@ -73,4 +79,7 @@ Then install other packages that you need customized.
     * quiet run output
   (myvenv) mark@tensorbook-server:~$ python quick.py
     * verbose output
+
+If you see errors, you may need to set:
+  (myvenv) mark@tensorbook-server:~$ TF_CPP_MIN_LOG_LEVEL=3 XLA_FLAGS=--xla_gpu_cuda_data_dir=/usr/lib/cuda LD_LIBRARY_PATH=${VIRTUAL_ENV}/lib/python3.10/site-packages/nvidia/cudnn/lib python ./quick.py
 
