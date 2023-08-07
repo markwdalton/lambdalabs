@@ -3,7 +3,7 @@
 #
 # Has all the Xid errors except 94 or ones for A100
 # Add the path you place the CSV list of errors
-NVIDIA_XID_ERRORS="~/data/xid-errors.csv"
+NVIDIA_XID_ERRORS="~/lambda/data/xid-errors.csv"
 
 #1.Avoid the binaries generally and faster:: - DONE
 #    Run nvidia-bug-report once through col -b to tmp file
@@ -70,9 +70,26 @@ echo "NVIDIA ${NVIDIA_VERSION}"
 
 echo " "
 
+# Check for Version Conflicts between Driver and Fabric manager
+VERSION_CONFLICT=$(egrep "Please update with matching NVIDIA driver" ${FILE} | wc -l)
+if [ ${VERSION_CONFLICT} -gt 0 ]; then
+    echo " "
+    echo "** There are GPU Driver and Fabric Manager Conflicts count:(${VERSION_CONFLICT})"
+    echo "     Please run the following to see them:"
+    echo "       egrep 'Please update with matching NVIDIA driver' ${FILE}"
+    echo "    ** This is important for any SXM chassis **"
+    echo "       Check with:"
+    echo "        'nvidia-smi topo -m'"
+    echo "         python -c \"import torch ; print('Is available: ', torch.cuda.is_available())\""
+    echo "         TF_CPP_MIN_LOG_LEVEL=3 python -c \"import tensorflow as tf; print('Num GPUs Available: ', \\"
+    echo "            len(tf.config.experimental.list_physical_devices('GPU')))\""
+    echo " "
+fi
+
 # Check for Xid Errors
 XID_COUNT=$(grep "kernel: NVRM: Xid" ${FILE} | cut -f1,5,6,7,8,9,10,11,12 -d: | cut -f1 -d"," | awk '{print $1,$2,$4,$5,$6}' | egrep -v -c "egrep")
 if [ ${XID_COUNT} -gt 0 ]; then
+   echo " "
    echo "Summary of Xid errors:"
    echo " Definitions: https://docs.nvidia.com/deploy/xid-errors/index.html"
    echo " A100 Xids: https://docs.nvidia.com/deploy/a100-gpu-mem-error-mgmt/index.html"
@@ -93,8 +110,9 @@ fi
 THERMAL_SLOW=$(egrep "SW Thermal Slowdown|HW Thermal Slowdown" ${FILE} | grep -c ": Active")
 if [ ${THERMAL_SLOW} -gt 0 ]; then
    echo " "
-   echo "Thermal Slow down:"
-   egrep "SW Thermal Slowdown|HW Thermal Slowdown" ${FILE} | grep ": Active"
+   echo "** Thermal Slow down:"
+   egrep "SW Thermal Slowdown|HW Thermal Slowdown" ${FILE} | grep ": Active" | sed '^/   /g'
+   echo " "
 else 
    echo "No thermal slowdown messages found"
 fi
@@ -105,14 +123,17 @@ if [ ${SEGFAULTS} -gt 0 ]; then
    echo " "
    echo "Segfaults: ${SEGFAULTS}"
    egrep "segfault" ${FILE} | sed 's/^/    /g'
+   echo " " 
 else
    echo "No segfaults found"
 fi
 
 CPU_THROTTLE=$(egrep "cpu clock throttled" ${FILE} | wc -l)
 if [ ${CPU_THROTTLE} -gt 0 ]; then
-   echo "There was CPU thottling:"
+   echo " "
+   echo "** There was CPU thottling:"
    grep "cpu clock throttled" ${FILE}| cut -f3 -d":" | sort | uniq -c | sed 's/^/     /g'
+   echo " "
 else
    echo "No CPU throttling"
 fi
@@ -121,9 +142,10 @@ fi
 HARDWARE_ERRORS=$(grep -c "Hardware Error" ${FILE})
 if [ ${HARDWARE_ERRORS} -gt 0 ]; then
    echo " "
-   echo "Hardware Errors: ${HARDWARE_ERRORS}"
-   echo "To find specific errors:"
-   echo "    egrep 'Hardware Error' ${FILE}"
+   echo "** Hardware Errors: ${HARDWARE_ERRORS}"
+   echo "  To find specific errors:"
+   echo "      egrep 'Hardware Error' ${FILE}"
+   echo " "
 else
    echo "No Hardware Errors found"
 fi
@@ -133,8 +155,9 @@ echo ""
 FALLEN_ERRORS=$(egrep "kernel: NVRM:.*GPU has fallen off the bus" ${FILE} | wc -l)
 if [ ${FALLEN_ERRORS} -gt 0 ]; then
    echo " "
-   echo "Fallen off the bus Errors: ${FALLEN_ERRORS}"
+   echo "** Fallen off the bus Errors: ${FALLEN_ERRORS}"
    egrep "kernel: NVRM: GPU at PCI|kernel: NVRM:.*GPU has fallen off the bus" ${FILE} | sed 's/^/   /g'
+   echo " "
 else
    echo "No 'fallen off the bus' errors"
 fi
@@ -143,8 +166,9 @@ fi
 RMINIT_FAILED=$(egrep "RmInitAdapter failed|rm_init_adapter failed" ${FILE} | wc -l)
 if [ ${RMINIT_FAILED} -gt 0 ]; then
    echo " "
-   echo "GPU RmInitiAdapter Failed"
+   echo "** GPU RmInitiAdapter Failed"
    egrep "RmInitAdapter failed|rm_init_adapter failed" ${FILE} | grep "]" | cut -f2 -d"]" | sort | uniq -c
+   echo " "
 else
    echo "No 'RmInit failures'"
 fi
