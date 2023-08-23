@@ -26,8 +26,9 @@ So for Software, configuration, debugging (on a machine with A100 and NVLink/NVS
 - On the A100's you can check for remapped memory and if it succeeded:
    * nvidia-smi --query-remapped-rows=gpu_bus_id,gpu_uuid,remapped_rows.correctable,remapped_rows.uncorrectable,remapped_rows.pending,remapped_rows.failure --format=csv
   * or use nvidia-smi -q and look for the section.
- - Examples on pages 4 and 5 of:
-   https://docs.google.com/presentation/d/18ERtIuMZRQxk2_QdqyjAElBDnkrbVBorwgasAmxZ4Us/
+ - Examples on images:
+![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/GPUs/NVIDIA-GPU-Remapping-worked.png "Remapping Worked")</p>
+![alt text](https://github.com/markwdalton/lambdalabs/blob/main/documentation/GPUs/NVIDIA-GPU-Remapping-failure.png "Remapping Failed")</p>
 
 Useful Debugging information:
 
