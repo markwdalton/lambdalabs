@@ -2,8 +2,9 @@
 
 This can happen for various reasons:
 1. ACSCtl - is enabled in the BIOS
-2. Hardware issue (for example one NVLink is broken) (nvidia-smi topo -m) 
-3. on a Supermicro SYS-421GE-TNRT.  The solution was to run the and turn off ACSCtl on all PCI devices:
+2. Hardware issue (for example one NVLink is broken) (nvidia-smi topo -m) - Avoid that GPU pair and replace the NVLink
+3. On older kernels on AMD >= 4x NVIDIA GPUS without iommu=soft any multi-GPU job may hang.  Solution add iommu=soft to /etc/default/grub
+4. on a Supermicro SYS-421GE-TNRT.  The solution was to run the and turn off ACSCtl on all PCI devices:
 ..*Taken from: https://discuss.pytorch.org/t/single-machine-ddp-issue-on-a6000-gpu/134869/14
 ```
 #!/bin/bash
