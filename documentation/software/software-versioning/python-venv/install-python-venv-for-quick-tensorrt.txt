@@ -30,13 +30,12 @@ Check your installed packages:
 3. Activate the environment:
     $ .  ./myvenv/bin/activate
 4. Install tensorflow 
-    $ pip install tensorflow
+    $ pip install tensorflow[and-cuda]
 5. Run a simple test with the base install:
    TF_CPP_MIN_LOG_LEVEL=3 python -c 'import tensorflow as tf; print("\nTensorflow version: ",tf.__version__, "\nTensorflow file: ",tf.__file__) ; print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices("GPU")))'
 6. Install packages (like tensorrt).
-   $ pip install nvidia-tensorrt==8.4.1.5
+   $ pip install nvidia-tensorrt
      At times there are bugs/issues with the default: pip install nvidia-tensorrt
-
    On a older python3.8 release (still the latest 525.60.* driver, CUDA 11.8, tensorflow 11.2), I needed to install
      $ pip install nvidia-pyindex
      $ pip install nvidia-tensorrt
