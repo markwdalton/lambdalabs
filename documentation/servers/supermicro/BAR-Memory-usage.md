@@ -17,6 +17,8 @@ You can see the errors in dmesg during the boot:
 The most common solution for this is:
 * Set SR-IOV to enabled in the BIOS
 * Set Above 4G Decoding to enabled in the BIOS (it should be already enabled on servers)
+* [Example of Updating the BIOS](https://github.com/markwdalton/lambdalabs/blob/main/documentation/BIOS/supermicro-sum/Supermicro-SUM-BIOS-change.txt)
+* [Example looking at the BIOS with curl and json](https://github.com/markwdalton/lambdalabs/tree/main/documentation/BIOS)
 
 Then also set the kernel boot parameter pci=realloc=off
 * Either edit on the boot grub or you can set it in /etc/default/grub
