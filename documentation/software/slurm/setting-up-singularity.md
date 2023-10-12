@@ -1,0 +1,202 @@
+### Setting up Singularity for usage with Slurm
+
+* Basic requirements:
+a. You want the cache to be on a shared filesystem accross nodes.  The default SINGULARITY_CACHEDIR is ${HOME}/.singularity/cache
+b. You need signularity install on all nodes or in a shared file system
+
+* NOTE: To run with GPUs, use the '--nv' option:
+```
+  $ singularity <command> --nv <container>  script
+example 'exec' will execute a command/script on that container
+  $ singularity exec --nv <container> script
+example 'run' will run the container with its default action
+  $ singularity run --nv <container> 
+```
+
+1. Install requirements:
+   Ubuntu 20.04:
+```
+      $ sudo apt-get install -y build-essential libssl-dev uuid-dev libgpgme11-dev \
+        squashfs-tools libseccomp-dev wget pkg-config git cryptsetup debootstrap
+```
+2. Install go:
+```
+   $ sudo apt install golang-go
+```
+3. Download, Build, Install Singularity
+```
+   $ mkdir ~/src/singularity -p
+   $ cd ~/src/singularity
+   Download:
+    $ wget https://github.com/singularityware/singularity/releases/download/v3.5.3/singularity-3.5.3.tar.gz
+   Unpack:
+    $ tar -zxf singularity-3.5.3.tar.gz
+    $ mv singularity 3.5.3
+   Create install directory:
+    $ sudo mkdir -p /opt/singularity/3.5.3
+   Configure:
+    $ ./mconfig --prefix=/opt/singularity/3.5.3 
+   Build:
+    $ cd builddir
+    $ make
+    $ sudo make install
+   Setup:
+    $ sudo cp /opt/singularity/3.5.3/etc/bash_completion.d/singularity /etc/bash_completion.d/
+   Set PATH (or use modules):
+    $ sudo vi /etc/environment
+       --> Add /opt/singularity/3.5.3/bin to your PATH 
+    example:
+       PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/singularity/3.5.3/bin"
+```
+4. Logout and log back in again to see it is setup correctly and it is in your path
+5. Testing:
+```
+   $ singularity pull docker://godlovedc/lolcow
+   $ singularity exec library://ubuntu:16.04 cat /etc/os-release
+```
+6. See what images you have installed:
+```
+   $ singularity cache list --type=library,oci -v
+```
+7. How to setup to a alternative shared cache directory:
+```
+   Where '/scratch/<fileystem>/' is a shared file system across nodes, ideally fast
+     $ export SINGULARITY_CACHEDIR=/scratch/<fileystem>/$USER
+     $ singularity pull docker://godlovedc/lolcow
+     $ singularity cache list --type=library,oci -v
+```
+8. Converting a docker image to a singularity image:
+```
+     $ singularity pull docker://nvcr.io/nvidia/pytorch:21.06-py3
+        -> by default this will get converted and stored in your cache in ${HOME}/.singularity/cache
+```
+9. Running the converted docker, example:
+```
+  $ singularity exec --nv pytorch_21.06-py3.sif python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Current Device: ", torch.cuda.current_device()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.version) ; print("pytorch file: ", torch.__file__)'
+  
+  Is available:  True
+  Current Device:  0
+  Pytorch CUDA Compiled version:  11030
+  Pytorch version:  <module 'torch.version' from '/opt/conda/lib/python3.8/site-packages/torch/version.py'>
+  pytorch file:  /opt/conda/lib/python3.8/site-packages/torch/__init__.py
+```
+* Example 2 with newer Python CUDA 12.2 (example running with a shell and then running)
+```
+   $ singularity shell --nv docker://nvcr.io/nvidia/pytorch:23.09-py3
+   Singularity> python ./torch-test.py
+      Is available:  True
+      Current Device:  0
+      Pytorch CUDA Compiled version:  12020
+      Pytorch version:  2.1.0a0+32f93b1
+      pytorch file:  /usr/local/lib/python3.10/dist-packages/torch/__init__.py
+      List GPUs:
+         NVIDIA RTX A4000
+         NVIDIA RTX A4000
+         NVIDIA RTX A4000
+         NVIDIA RTX A4000
+         NVIDIA RTX A4000
+         NVIDIA RTX A4000
+         NVIDIA RTX A4000
+         NVIDIA RTX A4000
+```
+10. Cleaning the cache:
+```
+   List images:
+      $ singularity cache list --type=library,oci -v
+   List everything:
+      $ singularity cache list -v
+   Clean ALL images in the cache:
+      $ singularity cache clean 
+   Cleaned specific containers:
+      $ singularity cache clean -N <IMAGE_NAME>
+
+      Example, clearing the image 'ubuntu_16.04.sif'
+         $ singularity cache clean -N ubuntu_16.04.sif
+
+      Or to clear all blobs:
+         $ singularity cache clean -T blob
+```
+11.  And if you want a 'shared space' for images, a standard image you want to share:
+```
+     For example on a Shared file system in this case "/share" would be mounted on all nodes.
+     It would enable all users to use shared images, recommended writable only by root.
+        srun --gres=gpu:1 -n 1 singularity run --containall /share/images/lolcow_latest.sif
+
+   * If you have global images for anyone to use
+   * This can be created with:
+       $ sudo mkdir -p /share/images
+       $ sudo cp ${HOME}/.singularity/cache/library/sha256.e37e11f101a9db82a08bf63f816219da0d4da0e19f5323761d92731213c9e751/lolcow_latest.sif /share/images
+
+   And you can still run images from your local cache or download to your local cache: ${HOME}/.singularity/cache
+    srun --gres=gpu:1 -n 1 singularity run lolcow_latest.sif
+    * This would use your default cache which is in ${HOME}/.singularity/...
+       It can be changed by: SINGULARITY_CACHEDIR=
+       But the user needs to be able to write there and each node needs to see this directory.
+```
+12. Slurm Plugins is another topic:
+..* And if you want the slurm plugin, I have a few existing plugs I can use or we can write one.
+...https://git.biohpc.swmed.edu/biohpc/singularity/-/tree/6a219a05fa192f75f420461334404d16dfbb9416/src/slurm
+...https://github.com/grondo/slurm-spank-plugins
+...https://github.com/sol-eng/singularity-rstudio/blob/main/slurm-singularity-exec.md
+..* These are just examples of other ways to run or add functionality things like:
+...Singularity options
+...Node Health Check
+...Job cleanup
+...misc
+
+*Example runs:
+Run from Local user cache:
+```
+     $ srun --gres=gpu:1 -n 1 singularity run lolcow_latest.sif
+       * This would use your default cache which is in ${HOME}/.singularity/...
+         It can be changed by: SINGULARITY_CACHEDIR=
+         But the user needs to be able to write there and each node needs to see this directory.
+```
+This will pull and run on a image from the sylab:
+```
+     $ srun --gres=gpu:1 -n 1 singularity run library://sylabsed/examples/lolcow
+  Download from docker: (to your local cache and run):  (NOTE This takes a long time to convert from docker to singularity).
+     $ srun --gres=gpu:1 -n 1 singularity exec --nv docker://nvcr.io/nvidia/pytorch:23.09-py3 python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Current Device: ", torch.cuda.current_device()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.__version__) ; print("pytorch file: ", torch.__file__)'
+```
+To save to shared directory:
+..*This will just shows the singularity and docker converted images:
+```
+       $ singularity cache list --type=library,oci -v
+          NAME                     DATE CREATED           SIZE             TYPE
+          lolcow_latest.sif        2023-10-11 21:38:41    83.79 MB         library
+          pytorch_23.09-py3.sif    2023-10-11 21:57:10    9.86 GB          oci
+
+          There are 2 container file(s) using 9.94 GB of space
+          Total space used: 9.94 GB
+```
+..*Find the full path of the image:
+```
+       $ find ~/.singularity -name '*.sif'
+       /home/support/.singularity/cache/library/sha256.e37e11f101a9db82a08bf63f816219da0d4da0e19f5323761d92731213c9e751/lolcow_latest.sif
+       /home/support/.singularity/cache/oci-tmp/b62b664b830dd9f602e2657f471286a075e463ac75d10ab8e8073596fcb36639/pytorch_23.09-py3.sif
+```
+..*If not already done, create shared directory (That should be shared across the nodes) 
+```
+       $ sudo mkdir -p /share/images
+       $ find ~/.singularity -name '*.sif'
+         * Copy the images out to the 'shared area' - either rename or co-ordinate with other users on the 'new version'
+```
+..*Copy the image to the /share/images directory:
+```
+       $ sudo cp ${HOME}/.singularity/cache/library/sha256.e37e11f101a9db82a08bf63f816219da0d4da0e19f5323761d92731213c9e751/lolcow_latest.sif /share/images
+       $ sudo cp ~/.singularity/cache/oci-tmp/b62b664b830dd9f602e2657f471286a075e463ac75d10ab8e8073596fcb36639/pytorch_23.09-py3.sif /share/images
+```
+..*Perhaps you have a different flavor of a image, just rename or version it:
+```
+       $ sudo cp ${HOME}/.singularity/cache/library/sha256.e37e11f101a9db82a08bf63f816219da0d4da0e19f5323761d92731213c9e751/lolcow_latest.sif /share/images/nathans-lolcow_202319011.sif
+```
+..*Run using a Shared directory:
+```
+     support@support-node:~$ srun --gres=gpu:1 -n 1 singularity exec --nv /share/images/pytorch_23.09-py3.sif python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Current Device: ", torch.cuda.current_device()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.__version__) ; print("pytorch file: ", torch.__file__)'
+
+     Is available:  True
+     Current Device:  0
+     Pytorch CUDA Compiled version:  12020
+     Pytorch version:  2.1.0a0+32f93b1
+     pytorch file:  /usr/local/lib/python3.10/dist-packages/torch/__init__.py
+```
