@@ -1,7 +1,7 @@
 #### Setting Up Slurm with gres and cgroups
+##### These are just basic instructions, with MIG you may want to use NVML in the gres.conf
 
 * [General Slurm Quick Start](https://slurm.schedmd.com/quickstart_admin.html)
-
 * [Slurm configuration tool](https://slurm.schedmd.com/configurator.html)
 
 Installing on Ubuntu:
@@ -130,7 +130,7 @@ Now to add gres for GPUs.  Examples:
    $ tail /etc/slurm/slurm.conf 
      # COMPUTE NODES
      GresTypes=gpu
-     NodeName=lambda-hyperplane01 NodeAddr=10.0.10.206 CPUs=64 Boards=1 SocketsPerBoard=2 CoresPerSocket=16 ThreadsPerCore=2 RealMemory=1031736 State=UNKNOWN  Gres=gpu:a100:8
+     NodeName=lambda-hyperplane01 CPUs=64 Boards=1 SocketsPerBoard=2 CoresPerSocket=16 ThreadsPerCore=2 RealMemory=1031736 State=UNKNOWN  Gres=gpu:a100:8
      PartitionName=batch Nodes=ALL Default=YES MaxTime=INFINITE State=UP
 ```
 
