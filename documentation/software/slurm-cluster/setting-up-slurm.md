@@ -64,10 +64,11 @@ sudo chown -R slurm /var/log/slurm
 ```
   sudo systemctl enable slurmctld
 ```
-
-# Optionally Enable the slurm database on the scheduling host, which needs mariadb, mysql or text file
-#  sudo systemctl enable slurmdbd
-
+Optionally:
+```
+Optionally Enable the slurm database on the scheduling host, which needs mariadb, mysql or text file
+  sudo systemctl enable slurmdbd
+```
 * And for compute nodes:
 ```
  sudo systemctl enable slurmd
