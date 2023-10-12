@@ -1,0 +1,101 @@
+
+A common question is how to make my machine(s) into a scheduled cluster.
+
+1. Please read the Echelon White paper.
+   This is written to explain how we build a Echelon cluster solution:
+   https://lambdalabs.com/gpu-cluster/echelon
+
+These are not in a given order, as they are all weighed by individuals.
+Generally performance is last, as if you want performance, it should be planned
+prior to purchasing and likely buy a solution versus parts with a Echelon.
+
+1. Consider your users needs, requirements and abilities.
+    - Efficiency or ease of use.
+    - Ease of management
+    - How much redundancy and concerns of single point of failures.
+2. Consider the size of  the cluster you are building.
+3. Consider the cost/investment.
+4. Consider the performance needs.
+
+What are the basic parts of a Cluster:
+=====================================
+1. Power is required to support these nodes. (PDUs and sufficient power).
+    * You need to consider how much power (how much power per rack)
+2. Racks to mount nodes and switches and PDUs.
+3. Cooling
+4. How to cool, making sure there is space between blades, but also with spacers.
+   You need to force the cool air to move through the front and out of the back of
+   each node. (so no open gaps, put in the spacers to block free airflow).
+
+The Compute setup:
+=================
+1. A management node (sometimes called a head node) - this is not for user access.
+   - Provisioning system (free PXE, commercial: NAV or Bright)
+   - dhcp server would run here or on a router/managed switch
+     NOTE: You only want DHCP going to the nodes in your cluster (not to the other networks)
+           or your security/network administrators would have issues.  That is setup in the
+           configuration for dhcp.
+   - https/tftp/PXE to server images - scales with machine
+          * data server for images nneds to scale either multiple provisioning 
+            or fast parallel filesystem
+   - ntp server for clients and storage to sync from (storage and nodes need to be sync'ed
+     to the same time)
+   - ldap commonly for user accounts - Flat username/UID,GID is important across the storage
+     and nodes.
+         ** Minimum flat Usernames/UIDs/GIDs across the nodes
+2. File system - at least a shared /home (Free: NFS server, Commercial: Weka.io, Vast) - cost and speed considerations.
+   - Design depends on needs, speeds, and storage
+   - With NFS - you want a large enough NVMe drive/space for 'cachefilesd' to cache your models
+     running at the same time on a given GPU machine.
+3. Schduler node (optional) - depends on how you configure and points of failure concerns
+    * You may want slurm, kubernetes, or other resource management running here
+    * Slurm for a secure, light weight fast scalable solution - HPC
+    * Kubernetes - more overhead, security issues, and DNS
+         -> either through slurm/singularity for more secure and fast) - to be HPC like
+         -> more 'desktop' like server farm
+4. Login node - (optional) - depending on scheduler and usage style.
+5. Switch(es) - again depends on network type, performance, and usage style.
+   - Separate or combined storage and data networks.
+   - Ethernet or Infiniband
+   - Do you have A100s or similar with NVSwitch for RDMA?
+   * Also I would normally put the IPMI network on a separate network for security.
+     IPMI gives you remote access to the console, power up/down, BIOS, health.
+6. GPU Nodes
+   - What do you have, homogeneous nodes or heterogenous (mixed node environment).
+   - ** Important: for NFS
+     With NFS, you will want free NVMe space sufficient for running models, and 
+     run cachefilesd to cache NFS data (so it does not need to go back to the NFS server each epoch).
+
+Other things to consider is file system structure.
+   - It is Bad design for a multi-user system is everything is on root (/).
+   - Good design would split (at least on login or shared user space)
+       * root - /
+       * /tmp
+       * /var
+       * /home - user directories - likely on NFS or weka/vast/lustre (DDN)
+       * cachefilesd for NFS
+       * swap or use swap files (fixed space)
+
+Access are your users able to use the command line or Jupyter notebook/lab/hub
+   - bare metal - simplest to user full system resources, but conflicts between users/jobs.
+   - slurm/scheduler + singularity + docker images - also more secure - no root issue 
+       * docker per node 
+   - slurm/scheduler + singularity + kubernetes
+       * given a pod
+       ** NOTE we still need to have 'Development' :) build/configure this.
+
+If users need to use a Graphical/web based interface:
+   - OpenOnDemand + slurm  (OpenOnDemand node would be RHEL based currently)
+   - MLOps Frameworks (with kubernetes)
+        * Kubeflow with various tools or rancher
+        * commercial: run.ai, cnvrg.io, determined.ai
+
+   - Kubernetes:
+        * rancher
+        * Kubeflow
+        * others
+
+Also for monitoring we can go over kill (useful) but beyond Lambda currently until we go to large
+high efficiency compute systems.
+   - https://www.osti.gov/servlets/purl/1640116
+
