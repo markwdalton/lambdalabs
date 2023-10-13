@@ -69,8 +69,8 @@ Then can copy it to the shared area:
 $ sudo cp ./my-image.sif /home/shared/images/
 ```
 
-Then to run you either from the local file:
-the image in /home/shared/images:
+Then to run either from the local file or the image in /home/shared/images:
+```
 user@login1:~$ srun --ntasks=2 --ntasks-per-node=1 --gres=gpu:1 --gpus-per-node=1 singularity exec ./my-image.sif grep PRETTY /etc/os-release
 PRETTY_NAME="Ubuntu 22.04.2 LTS"
 PRETTY_NAME="Ubuntu 22.04.2 LTS"
