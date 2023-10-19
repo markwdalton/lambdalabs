@@ -1,0 +1,70 @@
+
+
+On the NFS/data server:
+  1. Install nfs server:
+     $ sudo apt install nfs-kernel-server
+  2. List the NFS versions supported:
+     $ sudo cat /proc/fs/nfsd/versions
+     Normal is: -2 +3 +4 +4.1 +4.2
+  3. Check the status of nfs-server
+     $ sudo systemctl status nfs-server
+  4. Export from /etc/exports (Obviously change the <IP Address> to just a IP address or range)
+     $ echo "/data 	<IP address>(rw,sync,no_subtreecheck)" | sudo tee -a /etc/exports
+     $ echo "/data2       <IP address>(rw,sync,no_subtreecheck)" | sudo tee -a /etc/exports
+  5. Check to make sure the directories are open enough for users to access/create a directory
+     or you may want to only have specific permissions for specific users.
+     a. Example for wide open any user can create any directory in those directories to be exported:
+        $ sudo chmod 1777 /data /data2
+     b. Users cannot create new directories but you set up directories (example for kevin):
+        $ sudo chmod 755 /data /data2
+        $ sudo mkdir -p /data/kevin /data2/kevin
+        $ sudo chown kevin /data/kevin /data2/kevin
+        * Kevin would be able to write in his /data/kevin or /data2/kevin directory
+          but not in other directories.
+  6. Have the file systems listed in exports be exported
+     $ sudo exportfs -a
+   
+
+On the GPU machine:(If this is being used for training models, you will want 'cachefilesd')
+  1. Install the NFS Client software.
+     $ sudo apt install nfs-common
+  2. Create the directories you want to mount these:
+     $ sudo mkdir /data
+     $ sudo mkdir /data2
+     $ sudo chmod 1755 /data /data2
+  3. Setup the mounts in the /etc/fstab  ('fsc' is important for cachefilesd)
+     $ echo "<server IP address>:/data   /data   nfs  auto,relatime,nolock,bg,nfsvers=4,intr,tcp,fsc 0 0" | sudo tee -a /etc/fstab
+     $ echo "<server IP address>:/data2  /data2  nfs  auto,relatime,nolock,bg,nfsvers=4,intr,tcp,fsc 0 0" | sudo tee -a /etc/fstab
+  4. Mount the file system (the same way it would during a reboot):
+     $ sudo mount -a
+  5. Test to make sure it is working as expected: (as a user, root_squash is on by default)
+     $ mkdir /data/test /data2/test
+     $ ls -ld /data3/test /data2/test
+     drwxrwxr-x 2 kevin kevin 4096 Apr  6 12:29 /data/test
+     drwxrwxr-x 2 kevin kevin 4096 Apr  6 12:29 /data2/test
+
+Install and setup Cachefilesd: (On the client(s)).
+  1. Install Cachefilesd:
+     $ sudo apt-get install cachefilesd
+  2. Confirm the location you want to cache to, NVMe for training models:
+     a. Confirm user_xattr is set:
+        $ sudo tune2fs -l /dev/nvme2n1p2 | grep user_xattr
+        Default mount options:    user_xattr acl
+     b. Mounted as / or /var or for a full drive mounted as: /var/cache/fscache
+        $ df -h /var/cache/fscache
+        ** This should be a nvme drive
+        ** This should have sufficient space for cache needed for running models
+  2. Configuration of cachefilesd:  /etc/cachefilesd.conf and /etc/default/cachefilesd
+     a. /etc/cachefilesd.conf - the default should be fine
+     b. /etc/default/cachefilesd - uncomment the "#RUN=yes"
+        RUN=yes
+  3. Start the NFS caching 'cachefilesd':
+     $ sudo systemctl restart cachefilesd
+  4. Confirm caching is setup for this filesystem
+     $ sudo  cat /proc/fs/nfsfs/volumes
+
+     Example:
+     $ sudo  cat /proc/fs/nfsfs/volumes
+      NV SERVER   PORT DEV          FSID                              FSC
+      v4 c0a800d2  801 0:451        edfe3ce3d174433a:898d0541b738ecdc yes
+
