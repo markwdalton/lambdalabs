@@ -15,7 +15,6 @@ Example:
 3. On newer versions you may run into a issue with a error message:
 ```
 $ sudo /opt/slurm/22.05.10/sbin/slurmd -D -s -f /etc/slurm/slurm.conf
-slurmd: error: Node configuration differs from hardware: CPUs=16:48(hw) Boards=1:1(hw) SocketsPerBoard=1:1(hw) CoresPerSocket=16:24(hw) ThreadsPerCore=1:2(hw)
 slurmd: fatal: Hybrid mode is not supported. Mounted cgroups are: 2:devices:/
 1:freezer:/
 0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-bd4b89cc-37c2-41a9-8e5e-71633dffd47a.scope
