@@ -4,6 +4,28 @@
 * [General Slurm Quick Start](https://slurm.schedmd.com/quickstart_admin.html)
 * [Slurm configuration tool](https://slurm.schedmd.com/configurator.html)
 
+NOTE:
+1. If you have srun jobs hanging, specifically with mpirun + tensorflow it may be the version.  A work around was to use 'salloc' and 'sbatch' but the fix is likely to upgrade slurm.   There was a known issue in 20.11.00 to 20.11.02 (fixed in 20.11.03).
+2. If you have a commercial GPU like A100/H100 and want to do MIG, then you may want to recompile slurm to add nvml. NVML is also helpful for mapping based on PCI Bus IDs versus the relative index 0-N (/dev/nvidia#). To build:
+   
+```
+Example:
+   $ ./configure --with-nvml=/usr --with-munge=/usr/ --prefix=/opt/slurm/22.05.10
+```
+3. On newer versions you may run into a issue with a error message:
+```
+$ sudo /opt/slurm/22.05.10/sbin/slurmd -D -s -f /etc/slurm/slurm.conf
+slurmd: error: Node configuration differs from hardware: CPUs=16:48(hw) Boards=1:1(hw) SocketsPerBoard=1:1(hw) CoresPerSocket=16:24(hw) ThreadsPerCore=1:2(hw)
+slurmd: fatal: Hybrid mode is not supported. Mounted cgroups are: 2:devices:/
+1:freezer:/
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-bd4b89cc-37c2-41a9-8e5e-71633dffd47a.scope
+```
+To get the cgroups happy now have added 'cgroup_no_v1=all' (disabling cgroups v1):
+```
+sudo sed -iE '/^GRUB_CMDLINE.*DEFAULT/ s/"$/ cgroup_no_v1=all"/' /etc/default/grub
+```
+
+====
 Installing on Ubuntu:
 * Head node/Slurm node:
 ```
