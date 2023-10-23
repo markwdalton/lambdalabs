@@ -7,10 +7,12 @@
 NOTE:
 1. If you have srun jobs hanging, specifically with mpirun + tensorflow it may be the version.  A work around was to use 'salloc' and 'sbatch' but the fix is likely to upgrade slurm.   There was a known issue in 20.11.00 to 20.11.02 (fixed in 20.11.03).
 2. If you have a commercial GPU like A100/H100 and want to do MIG, then you may want to recompile slurm to add nvml. NVML is also helpful for mapping based on PCI Bus IDs versus the relative index 0-N (/dev/nvidia#). To build:
-   
 ```
 Example:
    $ ./configure --with-nvml=/usr --with-munge=/usr/ --prefix=/opt/slurm/22.05.10
+   There are also options to built for accounting based on the type of storage MySQL or use MariaDB
+    Compile option: --with-mysql_config=PATH
+   If installed it should automatically find it.
 ```
 3. On newer versions you may run into a issue with a error message:
 ```
