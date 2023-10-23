@@ -1,5 +1,60 @@
 ### Using Slurm with Singularity
 
+#####Running generally with Slurm:
+* Interactive runs:
+```
+Run one task on one node with one GPU, interactively (default time):
+$ srun --ntasks=1 --ntasks-per-node=1 --gres=gpu:1 --gpus-per-node=1 --pty bash -i
+
+Run a job for 30 minutes, interactively on 8 tasks per node on two nodes with 8 GPUs on each:
+$ srun --nodes=16 --ntasks-per-node=8 --gres=gpu:8 --gpus-per-node=8 --time=00:30:00 --pty bash -i
+
+Also you can get around bugs in some versions by using salloc:
+$ salloc --nodes=16 --ntasks-per-node=8 --gres=gpu:8 --gpus-per-node=8 --time=00:30:00
+salloc: Pending job allocation 4321 
+salloc: job 4321 queued and waiting for resources
+salloc: job 4321 has been allocated resources
+salloc: Granted job allocation 4321
+To attach to it: (srun --jobid=<jobid> --pty /bin/bash):
+$ srun --jobid=4321 --pty /bin/bash
+(node) $ mpirun python -c 'import tensorflow as tf; print(tf.__version__)'
+
+Interactive sessions do end if you exit the shell/internet issues or time expires.
+tmux can be used to avoid internet issues.  Just start the tmux session prior to starting the job.
+```
+* Batch command line:
+```
+$ srun --ntasks=1 --ntasks-per-node=1 --gres=gpu:1 --gpus-per-node=1 nvidia-smi
+```
+* You can use a batch file also and just run `sbatch 
+```
+$ chmod 700 myjob.sh
+$ cat myjob.sh
+#SBATCH --ntasks=16                    # Run on a single CPU
+#SBATCH --ntasks-per-node=1
+#SBATCH --gres=gpu:8
+#SBATCH --gpus-per-node=8
+#SBATCH --network=DEVNAME=mlx5_ib,DEVTYPE=IB
+#SBATCH --job-name=run-16nodes-torch-tensorflow
+#SBATCH --output=R-%x.%j.out
+## #SBATCH --mem=4                       # Job memory request
+## #SBATCH --time=00:05:00               # Time limit hrs:min:sec
+mpirun python -c 'import tensorflow as tf; print(tf.__version__)'
+```
+Monitoring Slurm:
+```
+List Nodes status:
+$ sinfo
+$ scontrol show node <nodename>
+List Jobs:
+$ squeue
+Cancel a job:
+$ scancel <jobid>
+Lists detailed information for a job:
+$ scontrol show jobid -dd <jobid>
+```
+
+##### Working with Singularity:
 * NOTE: To run with GPUs, use the '--nv' option:
 ```
   $ singularity <command> --nv <container>  script
@@ -98,16 +153,16 @@ example 'run' will run the container with its default action
 * Example runs:
 * Run from Local user cache:
 ```
-     $ srun --gres=gpu:1 -n 1 singularity run lolcow_latest.sif
+     $ srun --gres=gpu:1 -n 1 singularity --nv run lolcow_latest.sif
        * This would use your default cache which is in ${HOME}/.singularity/...
          It can be changed by: SINGULARITY_CACHEDIR=
          But the user needs to be able to write there and each node needs to see this directory.
 ```
 * This will pull and run on a image from the sylab:
 ```
-     $ srun --gres=gpu:1 -n 1 singularity run library://sylabsed/examples/lolcow
+     $ srun --gres=gpu:1 -n 1 --nv singularity run library://sylabsed/examples/lolcow
   Download from docker: (to your local cache and run):  (NOTE This takes a long time to convert from docker to singularity).
-     $ srun --gres=gpu:1 -n 1 singularity exec --nv docker://nvcr.io/nvidia/pytorch:23.09-py3 python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Current Device: ", torch.cuda.current_device()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.__version__) ; print("pytorch file: ", torch.__file__)'
+     $ srun --gres=gpu:1 -n 1 --nv singularity exec --nv docker://nvcr.io/nvidia/pytorch:23.09-py3 python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Current Device: ", torch.cuda.current_device()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.__version__) ; print("pytorch file: ", torch.__file__)'
 ```
 * To save to shared directory:
 ...This will just shows the singularity and docker converted images:
@@ -143,11 +198,22 @@ example 'run' will run the container with its default action
 ```
 * Run using a Shared directory:
 ```
-     support@support-node:~$ srun --gres=gpu:1 -n 1 singularity exec --nv /share/images/pytorch_23.09-py3.sif python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Current Device: ", torch.cuda.current_device()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.__version__) ; print("pytorch file: ", torch.__file__)'
+     user@login1:~$ srun --gres=gpu:1 -n 1 singularity exec --nv /share/images/pytorch_23.09-py3.sif python -c 'import torch ; print("Is available: ", torch.cuda.is_available()) ; print("Current Device: ", torch.cuda.current_device()) ; print("Pytorch CUDA Compiled version: ", torch._C._cuda_getCompiledVersion()) ; print("Pytorch version: ", torch.__version__) ; print("pytorch file: ", torch.__file__)'
 
      Is available:  True
      Current Device:  0
      Pytorch CUDA Compiled version:  12020
      Pytorch version:  2.1.0a0+32f93b1
      pytorch file:  /usr/local/lib/python3.10/dist-packages/torch/__init__.py
+```
+
+#### Pulling or using Ubuntu from Singularity Library
+```
+user@login1:~$ singularity exec library://ubuntu:20.04 grep PRETTY /etc/os-release
+INFO:    Downloading library image
+PRETTY_NAME="Ubuntu 20.04.4 LTS"
+
+user@login1:~$ singularity exec library://ubuntu:22.04 grep PRETTY /etc/os-release
+INFO:    Downloading library image
+PRETTY_NAME="Ubuntu 22.04 LTS"
 ```
