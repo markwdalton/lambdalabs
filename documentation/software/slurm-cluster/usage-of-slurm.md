@@ -16,7 +16,9 @@ salloc: job 4321 queued and waiting for resources
 salloc: job 4321 has been allocated resources
 salloc: Granted job allocation 4321
 To attach to it: (srun --jobid=<jobid> --pty /bin/bash):
+
 $ srun --jobid=4321 --pty /bin/bash
+
 (node) $ mpirun python -c 'import tensorflow as tf; print(tf.__version__)'
 
 Interactive sessions do end if you exit the shell/internet issues or time expires.
@@ -30,16 +32,21 @@ $ srun --ntasks=1 --ntasks-per-node=1 --gres=gpu:1 --gpus-per-node=1 nvidia-smi
 ```
 $ chmod 700 myjob.sh
 $ cat myjob.sh
-#SBATCH --ntasks=16                    # Run on a single CPU
+#!/bin/bash
+#SBATCH --ntasks=16                    # Run 16 total tasks
 #SBATCH --ntasks-per-node=1
 #SBATCH --gres=gpu:8
 #SBATCH --gpus-per-node=8
-#SBATCH --network=DEVNAME=mlx5_ib,DEVTYPE=IB
-#SBATCH --job-name=run-16nodes-torch-tensorflow
-#SBATCH --output=R-%x.%j.out
+## #SBATCH --network=DEVNAME=mlx5_ib,DEVTYPE=IB    # define if on a IB network
+#SBATCH --job-name=slurm-mpi-tf
+#SBATCH --output=job-%x.%j.out
 ## #SBATCH --mem=4                       # Job memory request
 ## #SBATCH --time=00:05:00               # Time limit hrs:min:sec
 mpirun python -c 'import tensorflow as tf; print(tf.__version__)'
+
+$ sbatch myjob.sh
+  The job output will return to a file in your directory, in this instance the name would be:
+    -> job-slurm-mpi-tf.<jobid>.out
 ```
 Monitoring Slurm:
 ```
