@@ -37,9 +37,9 @@ slurmd: fatal: Hybrid mode is not supported. Mounted cgroups are: 2:devices:/
 1:freezer:/
 0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-bd4b89cc-37c2-41a9-8e5e-71633dffd47a.scope
 ```
-To get the cgroups happy now have added 'cgroup_no_v1=all' (disabling cgroups v1):
+To get the cgroups happy now have added 'systemd.unified_cgroup_hierarchy=1 systemd.legacy_systemd_cgroup_controller=0 cgroup_no_v1=all':
 ```
-sudo sed -iE '/^GRUB_CMDLINE.*DEFAULT/ s/"$/ cgroup_no_v1=all"/' /etc/default/grub
+sudo sed -iE '/^GRUB_CMDLINE.*DEFAULT/ s/"$/ systemd.unified_cgroup_hierarchy=1 systemd.legacy_systemd_cgroup_controller=0 cgroup_no_v1=all"/' /etc/default/grub
 sudo update-grub
 ```
 4. For Other kernel parameters for cgroups memory and swap:
