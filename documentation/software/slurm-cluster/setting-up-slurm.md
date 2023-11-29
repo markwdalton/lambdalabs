@@ -8,25 +8,22 @@ NOTE:
 1. If you have srun jobs hanging, specifically with mpirun + tensorflow it may be the version.  A work around was to use 'salloc' and 'sbatch' but the fix is likely to upgrade slurm.   There was a known issue in 20.11.00 to 20.11.02 (fixed in 20.11.03).
 2. If you have a commercial GPU like A100/H100 and want to do MIG, then you may want to recompile slurm to add nvml. NVML is also helpful for mapping based on PCI Bus IDs versus the relative index 0-N (/dev/nvidia#). And look at building from source example.
 3. On newer versions you may run into a issue with a error message:
-```
-$ sudo /opt/slurm/22.05.10/sbin/slurmd -D -s -f /etc/slurm/slurm.conf
-slurmd: fatal: Hybrid mode is not supported. Mounted cgroups are: 2:devices:/
-1:freezer:/
-0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-bd4b89cc-37c2-41a9-8e5e-71633dffd47a.scope
-```
-For slurm 20.02 or higher with Ubuntu 22.04 or higher with cgroups:
-```
+
+#### For slurm 20.02 or higher with Ubuntu 22.04 or higher with cgroups:
 FAQ shows: https://slurm.schedmd.com/faq.html
 You will need: systemd.unified_cgroup_hierarchy=1 systemd.legacy_systemd_cgroup_controller=0 cgroup_no_v1=all
 Plus for memory/swap control you need: cgroup_enable=memory swapaccount=1 
-
+```
 sudo sed -e 's@^GRUB_CMDLINE_LINUX=@#GRUB_CMDLINE_LINUX=@' -i /etc/default/grub
 echo 'GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=1 systemd.legacy_systemd_cgroup_controller=0 cgroup_no_v1=all cgroup_enable=memory swapaccount=1"' | sudo tee -a /etc/default/grub
 sudo update-grub
+
+# Then you will need to reboot:
+sudo reboot
 ```
 
 ====
-Installing on Ubuntu:
+#### Installing on Ubuntu:
 * Head node/Slurm node:
 ```
    sudo apt install slurm slurm-client slurm-wlm slurm-wlm-basic-plugins slurm-wlm-doc slurmd slurmctld slurmdbd munge
